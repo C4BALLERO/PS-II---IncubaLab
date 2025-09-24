@@ -1,3 +1,19 @@
+
+/* Reseteo global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tu layout principal */
 #root {
   max-width: 1280px; 
   margin: 0 auto;  
@@ -5,7 +21,11 @@
   text-align: center;
 }
 
+.App {
+  min-height: 100vh;
+}
 
+/* Logo animaciones */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -20,12 +40,8 @@
 }
 
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -34,10 +50,12 @@
   }
 }
 
+/* Tarjetas */
 .card {
   padding: 2em;
 }
 
+/* Textos */
 .read-the-docs {
   color: #888;
 }
