@@ -1,0 +1,199 @@
+/* src/styles/Profile.css */
+
+/* Bloquear que el navegador fuerce modo oscuro */
+:root {
+  color-scheme: light !important;
+}
+
+/* Layout principal */
+.profile-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 20px;
+  background: #e6e6e6 !important; /* gris claro fijo */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .profile-container {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+/* Panel izquierdo */
+.profile-left {
+  background: #ffffff !important;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  color: #000000 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 15px;
+  background: #8a1538; /* burdeos */
+  color: white;
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05);
+}
+
+.profile-title {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.profile-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.profile-username {
+  color: #666;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+.profile-links {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.profile-links a {
+  color: #000;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  padding: 5px 0;
+}
+
+.profile-links a:hover {
+  color: #8a1538;
+}
+
+.profile-extra-links {
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+  font-size: 0.9rem;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+.profile-stats div {
+  text-align: center;
+}
+
+.profile-stats strong {
+  font-size: 1.3rem;
+  display: block;
+  color: #8a1538;
+}
+
+.profile-info {
+  text-align: left;
+  font-size: 0.85rem;
+  margin-top: 15px;
+  line-height: 1.5;
+  color: #444;
+}
+
+/* Panel derecho */
+.profile-right {
+  background: #ffffff !important;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  color: #000000 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-title {
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: #333;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.accordion-item {
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.accordion-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.accordion-header {
+  background: #f7f7f7;
+  padding: 12px 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.accordion-header:hover {
+  background: #eee;
+}
+
+.accordion-header.active {
+  background: #56b6c2; /* celeste */
+  color: white;
+}
+
+.accordion-body {
+  background: #f9f9f9;
+  padding: 15px;
+  line-height: 1.5;
+}
+
+.accordion-body a {
+  color: #007acc;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: block;
+  margin: 8px 0;
+}
+
+.accordion-body a:hover {
+  color: #8a1538;
+  text-decoration: underline;
+}
+
+.arrow {
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+}
+
+.accordion-header.active .arrow {
+  transform: rotate(180deg);
+}
