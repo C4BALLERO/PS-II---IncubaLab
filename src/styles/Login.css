@@ -1,57 +1,171 @@
-.login-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  font-family: Arial, sans-serif;
+.login-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: "Be Vietnam", sans-serif;
 }
 
-.center-text {
+.login-split {
+  display: flex;
+  flex: 1;
+  min-height: 80vh;
+}
+
+.login-left,
+.login-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  color: #fff;
+}
+
+/* LADO IZQUIERDO - AZUL */
+.login-left {
+  background-color: #69a7d3; /* azul */
   text-align: center;
-  font-size: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left h2 {
+  font-family: "DM Serif Display", serif;
+  font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
-.left-text {
-  text-align: left;
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-}
-
-.right-text {
-  text-align: right;
-  font-size: 1.1rem;
+.login-left p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  line-height: 1.6;
   margin-bottom: 2rem;
 }
 
-.cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.card {
-  background-color: #f1f1f1;
-  padding: 1rem;
+.login-left .login-btn {
+  font-family: "Be Vietnam", sans-serif;
+  font-weight: 600;
+  border: 2px solid white;
+  padding: 0.75rem 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.long-text p {
-  margin: 0.3rem 0;
-}
-
-.fake-footer {
-  text-align: center;
-  padding: 1.5rem 0;
-  background-color: #2b2b2b;
+  background: transparent;
   color: white;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.login-left .login-btn:hover {
+  background: white;
+  color: #69a7d3;
+}
+
+/* LADO DERECHO - MORADO/BURDEOS */
+.login-right {
+  background-color: #7a0c3f; /* burdeos */
+  color: white;
+  text-align: center;
+  padding: 3rem;
+  overflow-y: auto;
+}
+
+.login-right h2 {
+  font-family: "DM Serif Display", serif;
+  font-size: 2.2rem;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.login-form label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.login-form input {
+  padding: 1rem;
+  border: 2px solid #f0f0f0;
   border-radius: 8px;
-  margin-top: 2rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+.login-form input::placeholder {
+  color: #8d8d8d;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #69a7d3;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(105, 167, 211, 0.1);
+}
+
+.forgot-password {
+  font-size: 0.9rem;
+  color: #eee;
+  margin-bottom: 1.5rem;
+  text-decoration: underline;
+}
+
+.login-form .register-btn {
+  background: white;
+  color: #7a0c3f;
+  border: none;
+  padding: 1.2rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.login-form .register-btn:hover {
+  background: #eee;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(122, 12, 63, 0.3);
+  color: #7a0c3f;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .login-split {
+    flex-direction: column;
+  }
+
+  .login-left,
+  .login-right {
+    padding: 2rem;
+  }
+
+  .login-left h2 {
+    font-size: 2rem;
+  }
+
+  .login-right h2 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-left h2 {
+    font-size: 1.8rem;
+  }
+
+  .login-right h2 {
+    font-size: 1.6rem;
+  }
 }
