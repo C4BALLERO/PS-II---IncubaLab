@@ -1,20 +1,16 @@
-// src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "./assets/layouts/MainLayout";
 
+// Views
 import Home from "./assets/views/Home";
 import Prueba from "./assets/views/prueba";
 import Profile from "./assets/views/Profile";
-
-// FAQ
 import Faq from "./assets/views/Faq";
-
-// Auth
 import Login from "./assets/views/login";
 import Register from "./assets/views/register";
-
-// NUEVO: Admin Usuarios (CRUD)
 import UsersAdmin from "./assets/views/UsersAdmin";
+import CrearCampania from "./assets/views/CrearCampania";
+import CrearCampania2 from "./assets/views/CrearCampania2";
 
 function App() {
   return (
@@ -26,10 +22,11 @@ function App() {
           <Route path="/prueba" element={<Prueba />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/faq" element={<Faq />} />
-
-          {/* NUEVA RUTA: Administración de Usuarios */}
           <Route path="/admin/users" element={<UsersAdmin />} />
 
+          {/* NUEVA RUTA: Crear Campaña */}
+          <Route path="/crear-campania" element={<CrearCampania />} />
+          <Route path="/crear-campania-2" element={<CrearCampania2 />} />
         </Route>
 
         {/* Rutas sin layout */}

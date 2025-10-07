@@ -1,0 +1,164 @@
+.crear-campania2-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: "Arial", sans-serif;
+  }
+  
+  /* Botón principal */
+  .next-btn {
+    display: inline-block;
+    background-color: #5ab7c7; /* azul celeste */
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .next-btn:hover {
+    background-color: #3fa6b6;
+  }
+  
+  /* Input de archivo custom */
+  .input-file {
+    display: none; /* ocultar el input nativo */
+  }
+  
+  .file-label {
+    display: inline-block;
+    background-color: #5ab7c7;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+  }
+  .file-label:hover {
+    background-color: #3fa6b6;
+  }
+  
+  /* Mostrar nombre de archivo */
+  .file-name {
+    font-size: 14px;
+    margin-left: 10px;
+    color: #333;
+  }
+  
+  /* Inputs de texto */
+  input[type="text"],
+  textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+  
+  /* Sección más información */
+ /* Sección más información */
+.more-info {
+    background-color: #870037; /* granate */
+    color: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 25px;
+    border: 2px solid #870037; /* marco */
+  }
+  
+  .more-info h2 {
+    color: #000; /* título negro */
+    margin-bottom: 12px;
+  }
+  
+  .more-info p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  
+  /* Agrupación de input de archivo + texto */
+.file-input-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .file-label {
+    background-color: #5ab7c7;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-label:hover {
+    background-color: #3fa6b6;
+  }
+  
+  .input-file {
+    display: none; /* ocultar input nativo */
+  }
+  
+  .file-name {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #333;
+    font-style: italic;
+  }
+  
+
+  .image-upload-container {
+    display: flex;
+    flex-direction: column; /* 👈 Ahora todo va en columna (vertical) */
+    align-items: flex-start; /* alineado a la izquierda */
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .preview-box {
+    width: 120px;
+    height: 120px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: #f9f9f9;
+  }
+  
+  .preview-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }
+  
+  .file-label {
+    display: inline-block;
+    background-color: #5ab7c7;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-label:hover {
+    background-color: #3fa6b6;
+  }
+  
+  .file-name {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px; /* 👈 espacio entre botón y texto */
+  }
+  

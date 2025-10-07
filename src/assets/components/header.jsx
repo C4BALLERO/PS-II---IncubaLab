@@ -21,8 +21,10 @@ const Header = () => {
         <nav className={`nav ${menuOpen ? "open" : ""}`}>
           {/* usar Link para navegación SPA */}
           <Link to="/">Inicio</Link>
-          <Link to="/prueba">Catálogo de proyectos</Link>
-          <Link to="/faq">Preguntas Frecuentes</Link>
+<Link to="/prueba">Catálogo de proyectos</Link>
+<Link to="/faq">Preguntas Frecuentes</Link>
+<Link to="/crear-campania">Crear una Campaña</Link>
+
 
           <div className="nav-buttons">
             <button className="login-btn" onClick={() => navigate("/login")}>
