@@ -1,13 +1,44 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import "../../styles/Login.css";
 
 const Login = () => {
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Formulario de login enviado");
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    try {
+      // Hacemos la petición al backend para login
+      const res = await fetch("http://localhost:3001/api/usuarios/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "❌ Credenciales incorrectas");
+        return;
+      }
+
+      console.log("✅ Login exitoso:", data.user);
+
+      // Guardar sesión en localStorage
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Redirigir al perfil
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error en login:", error);
+      alert("Ocurrió un error en el inicio de sesión");
+    }
   };
 
   return (
