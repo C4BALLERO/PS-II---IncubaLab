@@ -1,239 +1,128 @@
-/* Importar las tipografías */
-@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Be+Vietnam:ital,wght@0,100..900;1,100..900&display=swap");
-
-/* ELIMINAR TODAS LAS BARRAS DE SCROLL VISIBLES */
-html,
-body {
-  overflow: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  display: none;
-  width: 0;
-}
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-*::-webkit-scrollbar {
-  display: none;
-  width: 0;
-}
-
 .login-page {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* CONTENEDOR PRINCIPAL */
-.login-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem 0;
-  background-color: #ebebeb;
-  margin-top: 70px; /* Altura exacta del header */
-  margin-bottom: 0;
-  min-height: calc(100vh - 70px); /* Solo header fixed */
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* WRAPPER - ORDEN INVERTIDO (FORMULARIO IZQUIERDA, BIENVENIDA DERECHA) */
-.login-wrapper {
-  display: flex;
-  flex-direction: row-reverse; /* INVERTIDO RESPECTO AL REGISTER */
-  max-width: 100%;
-  width: 100%;
-  background: #66b5cb;
-  border-radius: 15px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  min-height: 850px;
-  max-height: 80vh;
-}
-
-/* Sección de bienvenida (DERECHA) */
-.welcome-section-login {
-  flex: 1;
-  background: linear-gradient(135deg, #66b5cb 0%, #880430 100%); /* INVERTIDO */
-  color: white;
-  padding: 3rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
   font-family: "Be Vietnam", sans-serif;
+}
+
+.login-split {
+  display: flex;
+  flex: 1;
+  min-height: 80vh;
+}
+
+.login-left,
+.login-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  color: #fff;
+}
+
+/* LADO IZQUIERDO - AZUL */
+.login-left {
+  background-color: #69a7d3; /* azul */
+  text-align: center;
   position: relative;
   overflow: hidden;
 }
 
-/* CURVA SVG DEL FIGMA - MIRANDO HACIA LA IZQUIERDA EN POSICIÓN DERECHA */
-.welcome-section-login::before {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 150%;
-  background-image: url("data:image/svg+xml,%3Csvg width='720' height='668' viewBox='0 0 720 668' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='530.847' cy='334' rx='530.847' ry='635.354' fill='%23880430' fill-opacity='0.3'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: 72% center; /* Posición derecha */
-  background-size: 50% auto;
-  z-index: 0;
-  top: 50%;
-  right: -30%;
-  left: auto;
-  transform: translateY(-50%);
-}
-
-.welcome-section-login h1,
-.welcome-section-login p,
-.welcome-section-login .login-prompt {
-  position: relative;
-  z-index: 1;
-}
-
-.welcome-section-login h1 {
+.login-left h2 {
+  font-family: "DM Serif Display", serif;
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  font-weight: 600;
-  font-family: "DM Serif Display", serif;
 }
 
-.welcome-section-login p {
+.login-left p {
   font-size: 1.2rem;
-  margin-bottom: 2rem;
   opacity: 0.9;
   line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.login-left .login-btn {
   font-family: "Be Vietnam", sans-serif;
-}
-
-.login-prompt {
-  margin-top: 2rem;
-}
-
-.login-prompt p {
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  font-family: "Be Vietnam", sans-serif;
-}
-
-.welcome-section-login .login-link {
-  color: white;
-  text-decoration: none;
   font-weight: 600;
   border: 2px solid white;
   padding: 0.75rem 2rem;
   border-radius: 8px;
-  transition: all 0.3s ease;
-  font-size: 1.1rem;
   background: transparent;
-  font-family: "Be Vietnam", sans-serif;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-.welcome-section-login .login-link:hover {
+.login-left .login-btn:hover {
   background: white;
-  color: #880430;
+  color: #69a7d3;
 }
 
-/* Sección del formulario (AHORA A LA IZQUIERDA) */
-.form-section-login {
-  flex: 1;
-  padding: 3rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Centrado vertical */
-  font-family: "Be Vietnam", sans-serif;
-  overflow-y: auto;
-  max-height: 100%;
-}
-
-.form-section-login::-webkit-scrollbar {
-  display: none;
-}
-
-.form-section-login h2 {
-  color: #880430;
-  font-size: 2.2rem;
-  margin-bottom: 2rem;
+/* LADO DERECHO - MORADO/BURDEOS */
+.login-right {
+  background-color: #7a0c3f; /* burdeos */
+  color: white;
   text-align: center;
-  font-weight: 600;
+  padding: 3rem;
+  overflow-y: auto;
+}
+
+.login-right h2 {
   font-family: "DM Serif Display", serif;
+  font-size: 2.2rem;
+  color: white;
+  margin-bottom: 2rem;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  min-height: min-content;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
-.form-group-login {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group-login label {
-  color: #000000;
+.login-form label {
   font-weight: 500;
   margin-bottom: 0.5rem;
-  font-size: 0.95rem;
-  font-family: "Be Vietnam", sans-serif;
+  color: white;
 }
 
-.form-group-login input {
+.login-form input {
   padding: 1rem;
   border: 2px solid #f0f0f0;
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
   background-color: #f0f0f0;
-  color: #000000;
-  font-family: "Be Vietnam", sans-serif;
+  color: #000;
 }
 
-.form-group-login input::placeholder {
+.login-form input::placeholder {
   color: #8d8d8d;
-  font-family: "Be Vietnam", sans-serif;
 }
 
-.form-group-login input:focus {
+.login-form input:focus {
   outline: none;
-  border-color: #66b5cb;
-  background-color: white;
-  box-shadow: 0 0 0 3px rgba(102, 181, 203, 0.1);
-  color: #000000;
+  border-color: #69a7d3;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(105, 167, 211, 0.1);
 }
 
-/* Estilo para el enlace "Olvidar contraseña" */
 .forgot-password {
-  text-align: right;
-  margin-top: -0.5rem;
-  margin-bottom: 1rem;
-}
-
-.forgot-password a {
-  color: #880430;
-  text-decoration: none;
   font-size: 0.9rem;
-  font-weight: 500;
-  font-family: "Be Vietnam", sans-serif;
-}
-
-.forgot-password a:hover {
+  color: #eee;
+  margin-bottom: 1.5rem;
   text-decoration: underline;
 }
 
-.login-form .login-btn {
-  background: #880430;
-  color: white;
+.login-form .register-btn {
+  background: white;
+  color: #7a0c3f;
   border: none;
   padding: 1.2rem 2rem;
   border-radius: 8px;
@@ -241,87 +130,42 @@ body::-webkit-scrollbar {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 1rem;
-  width: 100%;
-  font-family: "Be Vietnam", sans-serif;
+  text-decoration: none;
 }
 
-.login-form .login-btn:hover {
-  background: #660330;
+.login-form .register-btn:hover {
+  background: #eee;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(136, 4, 48, 0.3);
-  color: white;
+  box-shadow: 0 4px 12px rgba(122, 12, 63, 0.3);
+  color: #7a0c3f;
 }
 
 /* Responsive */
 @media (max-width: 968px) {
-  .login-wrapper {
-    flex-direction: column; /* En móvil vuelve al orden normal */
-    min-height: auto;
-    max-width: 100%;
-    max-height: none;
+  .login-split {
+    flex-direction: column;
   }
 
-  .welcome-section-login {
+  .login-left,
+  .login-right {
     padding: 2rem;
-    min-height: 300px;
-    order: 2; /* Bienvenida abajo en móvil */
   }
 
-  .welcome-section-login::before {
-    background-position: center;
-    background-size: 100% auto;
-    opacity: 0.2;
-    width: 150%;
-    height: 120%;
-    top: -10%;
-    right: -25%;
-    left: auto;
+  .login-left h2 {
+    font-size: 2rem;
   }
 
-  .form-section-login {
-    padding: 2rem;
-    max-height: none;
-    overflow-y: visible;
-    order: 1; /* Formulario arriba en móvil */
-  }
-
-  .login-container {
-    margin-top: 70px;
-    min-height: calc(100vh - 70px);
-    padding: 1rem 0;
+  .login-right h2 {
+    font-size: 1.8rem;
   }
 }
 
 @media (max-width: 480px) {
-  .login-container {
-    padding: 0.5rem 0;
-    margin-top: 70px;
-  }
-
-  .welcome-section-login h1 {
-    font-size: 2rem;
-  }
-
-  .form-section-login h2 {
+  .login-left h2 {
     font-size: 1.8rem;
   }
 
-  .login-wrapper {
-    width: 100%;
-  }
-
-  .welcome-section-login,
-  .form-section-login {
-    padding: 1.5rem;
-  }
-
-  .welcome-section-login::before {
-    width: 180%;
-    height: 110%;
-    top: -5%;
-    right: -40%;
-    left: auto;
-    background-size: 80% auto;
+  .login-right h2 {
+    font-size: 1.6rem;
   }
 }
