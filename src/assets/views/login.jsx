@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
+import ForgotPasswordPopup from "../components/forgotPasswordPopup"; // componente pop-up
 import "../../styles/Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,7 +16,7 @@ const Login = () => {
     const password = e.target.password.value;
 
     try {
-      // Hacemos la petición al backend para login
+      // Petición al backend con login via POST
       const res = await fetch("http://localhost:3001/api/usuarios/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,7 +32,7 @@ const Login = () => {
 
       console.log("✅ Login exitoso:", data.user);
 
-      // Guardar sesión en localStorage
+      // Guardar sesión
       localStorage.setItem("user", JSON.stringify(data.user));
 
       // Redirigir al perfil
@@ -68,7 +70,12 @@ const Login = () => {
               placeholder="Ingresa tu contraseña"
             />
 
-            <a href="#" className="forgot-password">
+            {/* Enlace que abre el pop-up */}
+            <a
+              href="#"
+              onClick={() => setIsPopupOpen(true)}
+              className="forgot-password"
+            >
               ¿Olvidaste tu contraseña?
             </a>
 
@@ -90,6 +97,12 @@ const Login = () => {
       </div>
 
       <Footer />
+
+      {/* Pop-up de recuperación */}
+      <ForgotPasswordPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+      />
     </div>
   );
 };
