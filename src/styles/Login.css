@@ -118,6 +118,7 @@
   color: #eee;
   margin-bottom: 1.5rem;
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .login-form .register-btn {
@@ -138,6 +139,66 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(122, 12, 63, 0.3);
   color: #7a0c3f;
+}
+
+/* POPUP RECUPERAR CONTRASEÑA */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #880430;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.popup-content input {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.popup-content button {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  border: none;
+  background-color: #69a7d3;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.popup-content button:hover {
+  background-color: #528cb0;
+}
+
+.close-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #ccc;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background: #aaa;
 }
 
 /* Responsive */
