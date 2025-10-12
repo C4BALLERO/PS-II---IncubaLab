@@ -1,0 +1,255 @@
+/* Variables de colores según el Figma */
+:root {
+  --color-guindo: #880430;
+  --color-celeste: #66B5CB;
+  --color-plomo: #8D8D8D;
+  --color-blanco: #FFFFFF;
+  --color-negro: #000000;
+  --color-gris-claro: #F5F5F5;
+  --color-gris-oscuro: #333333;
+  
+  /* Tipografías */
+  --font-primary: 'DM Serif Display', serif;
+  --font-secondary: 'Be Vietnam Pro', sans-serif;
+  
+  /* Sombras */
+  --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-button: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-secondary);
+  line-height: 1.6;
+  color: var(--color-negro);
+  background-color: var(--color-blanco);
+}
+
+/* Estilos para botones */
+.btn-primary {
+  background-color: var(--color-guindo);
+  color: var(--color-blanco);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: var(--font-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-button);
+}
+
+.btn-primary:hover {
+  background-color: #6B0326;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--color-blanco);
+  color: var(--color-guindo);
+  border: 2px solid var(--color-guindo);
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-family: var(--font-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-guindo);
+  color: var(--color-blanco);
+}
+
+/* Estilos para cards de proyectos */
+.project-card {
+  background-color: var(--color-blanco);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos específicos para cards horizontales */
+.project-card[style*="display: flex"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Estilos para el gradiente del hero */
+.hero-gradient {
+  background: linear-gradient(135deg, var(--color-celeste) 0%, var(--color-guindo) 100%);
+}
+
+/* Estilos para el footer */
+.footer-dark {
+  background-color: var(--color-gris-oscuro);
+  color: var(--color-blanco);
+}
+
+/* Utilidades */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.font-primary {
+  font-family: var(--font-primary);
+}
+
+.font-secondary {
+  font-family: var(--font-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+/* ===== HERO (banner con degradé de fondo) */
+.hero-shell{
+  position: relative;
+  padding: clamp(32px, 6vw, 72px) 16px;
+  background:
+    linear-gradient(105deg, var(--color-celeste, #63c6ea) 0%, transparent 35%),
+    linear-gradient(175deg, var(--color-guindo, #7b1632) 10%, #2d2a3a 95%);
+  /* Ajusta si tu degradé original es distinto */
+}
+
+.hero-glass{
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, .25);
+  /* GRID BLANCO + TRANSPARENCIA + BLUR (vidrio) */
+  background:
+    /* líneas verticales */
+    linear-gradient(to right, rgba(255,255,255,.55) 1px, rgba(255,255,255,0) 1px) 0 0/40px 100%,
+    /* líneas horizontales */
+    linear-gradient(to bottom, rgba(255,255,255,.55) 1px, rgba(255,255,255,0) 1px) 0 0/100% 40px,
+    /* velo base */
+    rgba(255,255,255,.28);
+  backdrop-filter: blur(10px) saturate(115%);
+  -webkit-backdrop-filter: blur(10px) saturate(115%);
+}
+
+.hero-grid{
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: clamp(20px, 4vw, 44px);
+  padding: clamp(22px, 4.5vw, 48px);
+}
+
+.hero-copy h1{
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: clamp(28px, 5vw, 48px);
+  line-height: 1.08;
+  color: var(--color-negro, #111);
+  margin: 0 0 10px;
+}
+
+.hero-copy p{
+  font-family: var(--font-secondary);
+  color: #1f2937;
+  max-width: 52ch;
+  margin: 0 0 18px;
+  font-size: clamp(15px, 1.5vw, 18px);
+}
+
+.hero-cta{
+  display: inline-block;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+/* Imagen con perímetro uniforme (squircle redondeado) */
+.hero-media{
+  align-self: center;
+}
+
+.hero-media img{
+  display: block;
+  width: 100%;
+  height: clamp(260px, 30vw, 420px);
+  object-fit: cover;
+  border-radius: 26px;              /* perímetro uniforme */
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(0,0,0,.20);
+  /* sutil máscara para sensación orgánica (opcional, quitar si no la quieres) */
+  -webkit-mask-image: radial-gradient(120% 100% at 50% 50%, #000 72%, rgba(0,0,0,0) 100%);
+          mask-image: radial-gradient(120% 100% at 50% 50%, #000 72%, rgba(0,0,0,0) 100%);
+}
+
+@media (max-width: 920px){
+  .hero-grid{ grid-template-columns: 1fr; }
+  .hero-media{ order: -1; }
+}
+
+
+/* ===== PROJECT CARD HORIZONTAL */
+.pcard{
+  background: var(--color-blanco);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, .10);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.pcard:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(2, 6, 23, .14); }
+
+.pcard__media{
+  width: 100%;
+  min-height: 180px;
+  background: var(--color-gris-claro);
+}
+.pcard__media img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+.pcard__body{
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+.pcard__title{ font-size: 1.15rem; font-weight: 800; color: var(--color-negro); margin: 0; }
+.pcard__desc{ color:#475569; line-height:1.45; margin: 0; max-height: 3.6em; overflow: hidden; }
+.pcard__meta{ margin-top: 2px; }
+.pcard__chip{
+  display:inline-block; padding:6px 10px; border-radius:999px;
+  background: #eef2f7; color:#0f172a; font-weight:600; font-size:.85rem;
+}
+.pcard__cta{ margin-top: 6px; align-self: start; }
+
+/* Variante horizontal */
+.pcard--h{ flex-direction: row; min-height: 220px; }
+.pcard--h .pcard__media{ width: 42%; min-height: 220px; }
+.pcard--h .pcard__body{
+  padding: 20px 22px;
+  width: 58%;
+  grid-template-rows: auto 1fr auto auto;
+}

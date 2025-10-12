@@ -1,0 +1,38 @@
+{
+  "name": "incuvalab-api",
+  "version": "1.0.0",
+  "description": "API service for IncuvaLab project with MVC architecture",
+  "main": "server.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "populate": "node populate-database.js",
+    "populate:force": "node populate-database.js --force"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "mysql2": "^3.6.0",
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "nextjs",
+    "api",
+    "mysql",
+    "mvc",
+    "incuvalab"
+  ],
+  "author": "IncubaLab Team",
+  "license": "MIT"
+}
