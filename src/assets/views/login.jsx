@@ -1,13 +1,46 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
+import ForgotPasswordPopup from "../components/forgotPasswordPopup"; // componente pop-up
 import "../../styles/Login.css";
 
 const Login = () => {
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Formulario de login enviado");
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    try {
+      // Petición al backend con login via POST
+      const res = await fetch("http://localhost:3001/api/usuarios/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "❌ Credenciales incorrectas");
+        return;
+      }
+
+      console.log("✅ Login exitoso:", data.user);
+
+      // Guardar sesión
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Redirigir al perfil
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error en login:", error);
+      alert("Ocurrió un error en el inicio de sesión");
+    }
   };
 
   return (
@@ -37,7 +70,12 @@ const Login = () => {
               placeholder="Ingresa tu contraseña"
             />
 
-            <a href="#" className="forgot-password">
+            {/* Enlace que abre el pop-up */}
+            <a
+              href="#"
+              onClick={() => setIsPopupOpen(true)}
+              className="forgot-password"
+            >
               ¿Olvidaste tu contraseña?
             </a>
 
@@ -59,6 +97,12 @@ const Login = () => {
       </div>
 
       <Footer />
+
+      {/* Pop-up de recuperación */}
+      <ForgotPasswordPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+      />
     </div>
   );
 };

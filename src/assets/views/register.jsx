@@ -1,18 +1,53 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import Header from "../components/header"; // Importación del Header
-import Footer from "../components/footer"; // Importación del Footer
+import { Link, useNavigate } from "react-router-dom";
+import Header from "../components/header";
+import Footer from "../components/footer";
 import "../../styles/Register.css";
 
 const Register = () => {
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Formulario enviado");
+
+    const firstName = e.target.firstName.value;
+    const lastName = e.target.lastName.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const confirmPassword = e.target.confirmPassword.value;
+
+    // Validación rápida
+    if (password !== confirmPassword) {
+      alert("Las contraseñas no coinciden");
+      return;
+    }
+
+    const formData = { firstName, lastName, email, password };
+
+    try {
+      const res = await fetch("http://localhost:3001/api/usuarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        throw new Error("Error en el registro");
+      }
+
+      const data = await res.json();
+      console.log("Usuario creado:", data);
+
+      alert("✅ Usuario registrado con éxito");
+      navigate("/login"); // Redirigir al login después del registro
+    } catch (error) {
+      console.error("Error al registrar usuario:", error);
+      alert("❌ Ocurrió un error al registrar el usuario");
+    }
   };
 
   return (
     <div className="register-page">
-      {/* Header integrado */}
       <Header />
 
       <div className="register-container">
@@ -121,11 +156,9 @@ const Register = () => {
         </div>
       </div>
 
-      {/* Footer integrado */}
       <Footer />
     </div>
   );
 };
 
 export default Register;
-
