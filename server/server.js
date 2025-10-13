@@ -3,12 +3,13 @@ import express from "express";
 import cors from "cors";
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
+import usuarioRoutes from "./src/routes/usuarios.js";
+import usersRoutes from "./src/routes/users.js"; // 👈 nuevo import
 
 dotenv.config();
 
 const app = express();
 
-// CORS básico (ajusta CLIENT_ORIGIN si quieres limitarlo)
 app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN || "*",
@@ -27,7 +28,7 @@ const db = await mysql.createPool({
   connectionLimit: 10,
 });
 
-// --- Endpoints básicos ---
+// Endpoints
 app.get("/", (_req, res) => {
   res.send("✅ API de Incuvalab activa. Usa POST /proyectos");
 });
@@ -41,7 +42,6 @@ app.get("/health", async (_req, res) => {
   }
 });
 
-// --- Crear proyecto ---
 app.post("/proyectos", async (req, res) => {
   const { titulo, descripcionBreve, descripcionGeneral } = req.body;
 
@@ -52,9 +52,8 @@ app.post("/proyectos", async (req, res) => {
     });
   }
 
-  // Valores mínimos obligatorios en tu tabla
-  const idCreador = 1;         // Debe existir en usuario.IdUser
-  const contribLimite = 100;   // Requerido por NOT NULL
+  const idCreador = 1;
+  const contribLimite = 100;
 
   try {
     const sql = `
@@ -73,7 +72,6 @@ app.post("/proyectos", async (req, res) => {
     const [result] = await db.execute(sql, params);
     return res.json({ success: true, id: result.insertId });
   } catch (err) {
-    // Mensajes útiles para depurar errores comunes
     console.error("❌ Error al insertar:", err.code || err.message);
 
     if (err.code === "ER_NO_REFERENCED_ROW_2") {
@@ -90,14 +88,17 @@ app.post("/proyectos", async (req, res) => {
   }
 });
 
-// --- Arrancar servidor ---
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
 
-// Cierre limpio (opcional)
 process.on("SIGINT", async () => {
-  try { await db.end(); } catch {}
+  try {
+    await db.end();
+  } catch {}
   process.exit(0);
 });
+
+app.use("/api/usuarios", usuarioRoutes);
+app.use("/users", usersRoutes); // 👈 nueva línea

@@ -17,7 +17,7 @@ const Login = () => {
 
     try {
       // Petición al backend con login via POST
-      const res = await fetch("http://localhost:3001/api/usuarios/login", {
+      const res = await fetch("http://localhost:4000/api/usuarios/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

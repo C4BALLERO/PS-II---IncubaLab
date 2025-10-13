@@ -16,7 +16,7 @@ const ForgotPasswordPopup = ({ isOpen, onClose }) => {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:3001/api/usuarios/send-token", {
+      const res = await fetch("http://localhost:4000/api/usuarios/send-token", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -42,7 +42,7 @@ const ForgotPasswordPopup = ({ isOpen, onClose }) => {
 
     try {
       const res = await fetch(
-        "http://localhost:3001/api/usuarios/validate-token",
+        "http://localhost:4000/api/usuarios/validate-token",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -77,7 +77,7 @@ const ForgotPasswordPopup = ({ isOpen, onClose }) => {
 
     try {
       const res = await fetch(
-        "http://localhost:3001/api/usuarios/reset-password",
+        "http://localhost:4000/api/usuarios/reset-password",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

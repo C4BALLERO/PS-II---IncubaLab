@@ -1,12 +1,12 @@
 // server/src/db.js
-import 'dotenv/config';
-import mysql from 'mysql2/promise';
+import "dotenv/config";
+import mysql from "mysql2/promise";
 
 const {
-  DB_HOST = 'localhost',
-  DB_USER = 'root',
-  DB_PASSWORD = '',
-  DB_NAME = 'incuvalab',
+  DB_HOST = "localhost",
+  DB_USER = "root",
+  DB_PASSWORD = "Alanes567",
+  DB_NAME = "incuvalab",
   DB_PORT = 3306,
 } = process.env;
 
@@ -23,6 +23,6 @@ export const pool = mysql.createPool({
 
 // prueba de conexión en arranque (útil para ver errores rápido)
 export async function checkDb() {
-  const [rows] = await pool.query('SELECT 1 AS ok');
+  const [rows] = await pool.query("SELECT 1 AS ok");
   return rows[0]?.ok === 1;
 }
