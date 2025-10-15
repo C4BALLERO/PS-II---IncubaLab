@@ -21,16 +21,18 @@ const Header = () => {
         <nav className={`nav ${menuOpen ? "open" : ""}`}>
           {/* usar Link para navegación SPA */}
           <Link to="/">Inicio</Link>
-<Link to="/prueba">Catálogo de proyectos</Link>
-<Link to="/faq">Preguntas Frecuentes</Link>
-<Link to="/crear-campania">Crear una Campaña</Link>
-
+          <Link to="/prueba">Catálogo de proyectos</Link>
+          <Link to="/faq">Preguntas Frecuentes</Link>
+          <Link to="/sobre">Sobre nosotros</Link>
 
           <div className="nav-buttons">
             <button className="login-btn" onClick={() => navigate("/login")}>
               Iniciar Sesión
             </button>
-            <button className="register-btn" onClick={() => navigate("/register")}>
+            <button
+              className="register-btn"
+              onClick={() => navigate("/register")}
+            >
               Registrarse
             </button>
           </div>
@@ -38,10 +40,16 @@ const Header = () => {
       </div>
 
       <div className="header-buttons">
-        <button className="login-btn desktop-btn" onClick={() => navigate("/login")}>
+        <button
+          className="login-btn desktop-btn"
+          onClick={() => navigate("/login")}
+        >
           Iniciar Sesión
         </button>
-        <button className="register-btn desktop-btn" onClick={() => navigate("/register")}>
+        <button
+          className="register-btn desktop-btn"
+          onClick={() => navigate("/register")}
+        >
           Registrarse
         </button>
       </div>

@@ -6,6 +6,14 @@ import Home from "./assets/views/Home";
 import Prueba from "./assets/views/prueba";
 import Profile from "./assets/views/Profile";
 import Faq from "./assets/views/Faq";
+<<<<<<< HEAD
+=======
+
+
+// ABOUT
+import About from "./assets/views/About"; 
+// Auth
+>>>>>>> origin/Alejandro-Mollo
 import Login from "./assets/views/login";
 import Register from "./assets/views/register";
 import UsersAdmin from "./assets/views/UsersAdmin";
@@ -22,6 +30,9 @@ function App() {
           <Route path="/prueba" element={<Prueba />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/faq" element={<Faq />} />
+          <Route path="/sobre" element={<About />} />
+
+          {/* NUEVA RUTA: Administración de Usuarios */}
           <Route path="/admin/users" element={<UsersAdmin />} />
 
           {/* NUEVA RUTA: Crear Campaña */}
