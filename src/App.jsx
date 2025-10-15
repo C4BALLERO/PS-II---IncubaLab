@@ -6,14 +6,10 @@ import Home from "./assets/views/Home";
 import Prueba from "./assets/views/prueba";
 import Profile from "./assets/views/Profile";
 import Faq from "./assets/views/Faq";
-<<<<<<< HEAD
-=======
-
 
 // ABOUT
-import About from "./assets/views/About"; 
+import About from "./assets/views/About";
 // Auth
->>>>>>> origin/Alejandro-Mollo
 import Login from "./assets/views/login";
 import Register from "./assets/views/register";
 import UsersAdmin from "./assets/views/UsersAdmin";
