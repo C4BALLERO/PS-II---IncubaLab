@@ -23,6 +23,8 @@ const Header = () => {
           <Link to="/">Inicio</Link>
           <Link to="/prueba">Catálogo de proyectos</Link>
           <Link to="/faq">Preguntas Frecuentes</Link>
+          <Link to="/sobre">Sobre nosotros</Link>
+
 
           <div className="nav-buttons">
             <button className="login-btn" onClick={() => navigate("/login")}>

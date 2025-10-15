@@ -9,6 +9,9 @@ import Profile from "./assets/views/Profile";
 // FAQ
 import Faq from "./assets/views/Faq";
 
+
+// ABOUT
+import About from "./assets/views/About"; 
 // Auth
 import Login from "./assets/views/login";
 import Register from "./assets/views/register";
@@ -26,6 +29,7 @@ function App() {
           <Route path="/prueba" element={<Prueba />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/faq" element={<Faq />} />
+          <Route path="/sobre" element={<About />} />
 
           {/* NUEVA RUTA: Administración de Usuarios */}
           <Route path="/admin/users" element={<UsersAdmin />} />
