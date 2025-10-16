@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import ForgotPasswordPopup from "../components/forgotPasswordPopup"; // componente pop-up
+import ForgotPasswordPopup from "../components/forgotPasswordPopup";
 import "../../styles/Login.css";
 
 const Login = () => {
@@ -11,12 +11,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const email = e.target.email.value;
+    const email = e.target.email.value.trim();
     const password = e.target.password.value;
 
     try {
-      // Petición al backend con login via POST
       const res = await fetch("http://localhost:4000/api/usuarios/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -24,19 +22,21 @@ const Login = () => {
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         alert(data.error || "❌ Credenciales incorrectas");
         return;
       }
 
-      console.log("✅ Login exitoso:", data.user);
-
-      // Guardar sesión
+      // Guarda lo que tu API devuelva. En tu backend actual devuelve { message, user }
       localStorage.setItem("user", JSON.stringify(data.user));
+      // Si en el futuro devuelves token, descomenta:
+      // localStorage.setItem("authToken", data.token);
 
-      // Redirigir al perfil
-      navigate("/profile");
+      // Notifica a toda la app (misma pestaña) que cambió el estado de auth
+      window.dispatchEvent(new Event("auth-changed"));
+
+      // Redirige al perfil
+      navigate("/");
     } catch (error) {
       console.error("Error en login:", error);
       alert("Ocurrió un error en el inicio de sesión");
@@ -59,6 +59,7 @@ const Login = () => {
               name="email"
               required
               placeholder="nombre@ejemplo.com"
+              autoComplete="username"
             />
 
             <label htmlFor="password">Contraseña</label>
@@ -68,13 +69,17 @@ const Login = () => {
               name="password"
               required
               placeholder="Ingresa tu contraseña"
+              autoComplete="current-password"
             />
 
             {/* Enlace que abre el pop-up */}
             <a
               href="#"
-              onClick={() => setIsPopupOpen(true)}
               className="forgot-password"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsPopupOpen(true);
+              }}
             >
               ¿Olvidaste tu contraseña?
             </a>
