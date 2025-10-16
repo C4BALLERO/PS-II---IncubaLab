@@ -3,20 +3,44 @@ import express from "express";
 import cors from "cors";
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
 dotenv.config();
 
 const app = express();
 
-// CORS básico (ajusta CLIENT_ORIGIN si quieres limitarlo)
+// --- Configuración CORS ---
 app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN || "*",
   })
 );
+
+// --- Middleware ---
 app.use(express.json());
 
-// Pool MySQL
+// --- Configurar carpeta de subida ---
+const uploadDir = "./uploads";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// --- Configurar almacenamiento de archivos ---
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage });
+
+// --- Conexión MySQL ---
 const db = await mysql.createPool({
   host: process.env.DB_HOST || "localhost",
   port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
@@ -27,77 +51,84 @@ const db = await mysql.createPool({
   connectionLimit: 10,
 });
 
-// --- Endpoints básicos ---
-app.get("/", (_req, res) => {
-  res.send("✅ API de Incuvalab activa. Usa POST /proyectos");
-});
+// --- Crear Proyecto (acepta JSON o archivos) ---
+app.post(
+  "/proyectos",
+  upload.fields([
+    { name: "imagen", maxCount: 1 },
+    { name: "producto", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      // ✅ Si no vienen archivos, req.files será undefined
+      const imagenFile = req.files?.["imagen"]?.[0] || null;
+      const productoFile = req.files?.["producto"]?.[0] || null;
 
+      // ✅ Si el frontend mandó JSON, los datos están en req.body
+      const { titulo, descripcionBreve, descripcionGeneral, video } = req.body;
+
+      if (!titulo || !descripcionGeneral) {
+        return res.status(400).json({
+          success: false,
+          message: "⚠️ El Título y la Descripción General son obligatorios",
+        });
+      }
+
+      const idCreador = 1; // debe existir en tabla usuario
+      const contribLimite = 100;
+
+      const sql = `
+        INSERT INTO proyecto
+        (Nombre, DescripcionCorta, DescripcionGeneral, ImagenPrincipal, ProductoFinal, Video, IdCreador, ContribuyenteLimite)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      const params = [
+        titulo,
+        descripcionBreve || null,
+        descripcionGeneral,
+        imagenFile ? imagenFile.filename : null,
+        productoFile ? productoFile.filename : null,
+        video || null,
+        idCreador,
+        contribLimite,
+      ];
+
+      const [result] = await db.execute(sql, params);
+      res.json({ success: true, id: result.insertId });
+    } catch (err) {
+      console.error("❌ Error al insertar:", err);
+      res.status(500).json({
+        success: false,
+        message: "❌ Error en el servidor al insertar el proyecto",
+      });
+    }
+  }
+);
+
+// --- Health check ---
 app.get("/health", async (_req, res) => {
   try {
     const [rows] = await db.query("SELECT 1 AS ok");
     res.json({ ok: rows?.[0]?.ok === 1 });
-  } catch (e) {
+  } catch (error) {
     res.status(500).json({ ok: false, error: "DB no disponible" });
   }
 });
 
-// --- Crear proyecto ---
-app.post("/proyectos", async (req, res) => {
-  const { titulo, descripcionBreve, descripcionGeneral } = req.body;
+// --- Servir archivos subidos ---
+app.use("/uploads", express.static(path.resolve("./uploads")));
 
-  if (!titulo || !descripcionGeneral) {
-    return res.status(400).json({
-      success: false,
-      message: "⚠️ El Título y la Descripción General son obligatorios",
-    });
-  }
-
-  // Valores mínimos obligatorios en tu tabla
-  const idCreador = 1;         // Debe existir en usuario.IdUser
-  const contribLimite = 100;   // Requerido por NOT NULL
-
-  try {
-    const sql = `
-      INSERT INTO proyecto
-        (Nombre, DescripcionCorta, DescripcionGeneral, IdCreador, ContribuyenteLimite)
-      VALUES (?, ?, ?, ?, ?)
-    `;
-    const params = [
-      titulo,
-      descripcionBreve || null,
-      descripcionGeneral,
-      idCreador,
-      contribLimite,
-    ];
-
-    const [result] = await db.execute(sql, params);
-    return res.json({ success: true, id: result.insertId });
-  } catch (err) {
-    // Mensajes útiles para depurar errores comunes
-    console.error("❌ Error al insertar:", err.code || err.message);
-
-    if (err.code === "ER_NO_REFERENCED_ROW_2") {
-      return res.status(400).json({
-        success: false,
-        message: "El IdCreador no existe en la tabla usuario",
-      });
-    }
-
-    return res.status(500).json({
-      success: false,
-      message: "❌ Error en el servidor al insertar el proyecto",
-    });
-  }
-});
-
-// --- Arrancar servidor ---
+// --- Iniciar servidor ---
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
 
-// Cierre limpio (opcional)
+// --- Cierre limpio ---
 process.on("SIGINT", async () => {
-  try { await db.end(); } catch {}
+  try {
+    await db.end();
+  } catch {}
   process.exit(0);
 });

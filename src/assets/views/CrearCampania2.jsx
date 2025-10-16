@@ -1,20 +1,50 @@
 import { useState } from "react";
 import "../../styles/CrearCampania2.css";
-import placeholder from "../react.svg"; // 👈 usa tu imagen de placeholder, cámbiala si tienes otra
+import placeholder from "../react.svg";
 
 const CrearCampania2 = () => {
   const [imagen, setImagen] = useState(null);
   const [preview, setPreview] = useState(null);
   const [producto, setProducto] = useState(null);
+  const [youtubeLink, setYoutubeLink] = useState("");
 
+  // --- Imagen seleccionada ---
   const handleImagenChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImagen(file.name);
-      setPreview(URL.createObjectURL(file)); // 👈 genera URL temporal para mostrar preview
+      setPreview(URL.createObjectURL(file));
     } else {
       setImagen(null);
       setPreview(null);
+    }
+  };
+
+  // --- Guardar proyecto en BD ---
+  const handleGuardar = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/proyectos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          titulo: "Proyecto sin título",
+          descripcionBreve: null,
+          descripcionGeneral: "Sin descripción general",
+          imagenPrincipal: imagen || null,
+          video: youtubeLink || null,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("✅ Proyecto guardado correctamente (ID: " + data.id + ")");
+      } else {
+        alert("❌ No se pudo guardar el proyecto: " + (data.message || "Error desconocido"));
+      }
+    } catch (err) {
+      console.error("Error al guardar:", err);
+      alert("❌ Error de conexión con el servidor.");
     }
   };
 
@@ -29,7 +59,7 @@ const CrearCampania2 = () => {
         <p className="subtext">
           Subir una imagen del proyecto según la medida de 600 x 400
         </p>
-        
+
         <div className="image-upload-container">
           <div className="preview-box">
             <img
@@ -70,7 +100,14 @@ const CrearCampania2 = () => {
           type="text"
           className="input"
           placeholder="https://youtu.be/xxxx"
+          value={youtubeLink}
+          onChange={(e) => setYoutubeLink(e.target.value)}
         />
+
+        {/* --- Botón Guardar agregado --- */}
+        <button className="save-btn" onClick={handleGuardar}>
+          💾 Guardar
+        </button>
 
         <button className="next-btn">Ir a la siguiente sección</button>
       </section>
