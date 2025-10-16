@@ -1,7 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Header from "../components/header";
-import Footer from "../components/footer";
 import "../../styles/Register.css";
 
 const Register = () => {
@@ -16,7 +14,6 @@ const Register = () => {
     const password = e.target.password.value;
     const confirmPassword = e.target.confirmPassword.value;
 
-    // Validación rápida
     if (password !== confirmPassword) {
       alert("Las contraseñas no coinciden");
       return;
@@ -31,15 +28,13 @@ const Register = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) {
-        throw new Error("Error en el registro");
-      }
+      if (!res.ok) throw new Error("Error en el registro");
 
       const data = await res.json();
       console.log("Usuario creado:", data);
 
       alert("✅ Usuario registrado con éxito");
-      navigate("/login"); // Redirigir al login después del registro
+      navigate("/login"); 
     } catch (error) {
       console.error("Error al registrar usuario:", error);
       alert("❌ Ocurrió un error al registrar el usuario");
@@ -48,15 +43,12 @@ const Register = () => {
 
   return (
     <div className="register-page">
-      <Header />
-
       <div className="register-container">
         <div className="register-wrapper">
           {/* Sección de bienvenida */}
           <div className="welcome-section">
             <h1>¡Bienvenido!</h1>
             <p>Estamos a tu disposición para ayudarte</p>
-
             <div className="login-prompt">
               <p>¿Ya tienes una cuenta?</p>
               <Link to="/login" className="login-link">
@@ -69,7 +61,6 @@ const Register = () => {
           <div className="form-section">
             <h2>Registro</h2>
             <form onSubmit={handleSubmit} className="register-form">
-              {/* Fila de nombre y apellido */}
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="firstName">Ingresa tu nombre</label>
@@ -93,7 +84,6 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Email */}
               <div className="form-group full-width">
                 <label htmlFor="email">Ingresa tu correo</label>
                 <input
@@ -105,7 +95,6 @@ const Register = () => {
                 />
               </div>
 
-              {/* Contraseñas */}
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="password">Contraseña</label>
@@ -129,13 +118,11 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Checkboxes */}
               <div className="checkbox-group">
                 <input type="checkbox" id="newsletter" name="newsletter" />
                 <label htmlFor="newsletter">
                   Envíeme una combinación semanal de proyectos seleccionados
-                  exclusivamente para mí, además de noticias ocasionales de
-                  incluya lab.
+                  exclusivamente para mí, además de noticias ocasionales.
                 </label>
               </div>
 
@@ -155,8 +142,6 @@ const Register = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

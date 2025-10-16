@@ -66,7 +66,7 @@ const Header = () => {
             Inicio
           </NavLink>
           <NavLink
-            to="/prueba"
+            to="/explorar"
             className={linkClass}
             onClick={() => setMenuOpen(false)}
           >

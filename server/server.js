@@ -3,21 +3,43 @@ import express from "express";
 import cors from "cors";
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Rutas
 import usuarioRoutes from "./src/routes/usuarios.js";
-import usersRoutes from "./src/routes/users.js"; // 👈 nuevo import
+import usersRoutes from "./src/routes/users.js"; // Rutas originales de tu compañero
+import proyectosRoutes from "./src/routes/proyecto.js"; // 👈 agregado desde tu versión
+import twoFARoutes from "./src/routes/2fa.js";
+
 
 dotenv.config();
 
 const app = express();
 
+// -------------------------------------------------------------
+// 🌐 CONFIGURACIÓN CORS Y MIDDLEWARE
+// -------------------------------------------------------------
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "*",
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173", // 👈 agregado: CORS fijo al frontend Vite
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 app.use(express.json());
 
-// Pool MySQL
+// -------------------------------------------------------------
+// 📁 CONFIGURAR STATIC /uploads PARA IMÁGENES
+// -------------------------------------------------------------
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // 👈 agregado
+
+// -------------------------------------------------------------
+// 💾 POOL DE CONEXIÓN MYSQL
+// -------------------------------------------------------------
 const db = await mysql.createPool({
   host: process.env.DB_HOST || "localhost",
   port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
@@ -28,7 +50,21 @@ const db = await mysql.createPool({
   connectionLimit: 10,
 });
 
-// Endpoints
+// -------------------------------------------------------------
+// 🧪 RUTA DE PRUEBA PARA CONEXIÓN A DB
+// -------------------------------------------------------------
+app.get("/test-db", async (req, res) => {
+  try {
+    const [rows] = await db.query("SELECT 1 + 1 AS result");
+    res.json({ resultado: rows[0].result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// -------------------------------------------------------------
+// 🔗 ENDPOINTS BASE
+// -------------------------------------------------------------
 app.get("/", (_req, res) => {
   res.send("✅ API de Incuvalab activa. Usa POST /proyectos");
 });
@@ -42,6 +78,9 @@ app.get("/health", async (_req, res) => {
   }
 });
 
+// -------------------------------------------------------------
+// 💡 RUTA DIRECTA PARA CREAR PROYECTOS (del server original)
+// -------------------------------------------------------------
 app.post("/proyectos", async (req, res) => {
   const { titulo, descripcionBreve, descripcionGeneral } = req.body;
 
@@ -88,11 +127,15 @@ app.post("/proyectos", async (req, res) => {
   }
 });
 
+// -------------------------------------------------------------
+// 🚀 INICIAR SERVIDOR
+// -------------------------------------------------------------
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
 
+// Cerrar conexión al salir
 process.on("SIGINT", async () => {
   try {
     await db.end();
@@ -100,5 +143,10 @@ process.on("SIGINT", async () => {
   process.exit(0);
 });
 
-app.use("/api/usuarios", usuarioRoutes);
-app.use("/users", usersRoutes); // 👈 nueva línea
+// -------------------------------------------------------------
+// 🧩 RUTAS EXTERNAS
+// -------------------------------------------------------------
+app.use("/api/usuarios", usuarioRoutes); // fusionado con tu ruta extendida (multer, editar, etc.)
+app.use("/users", usersRoutes);
+app.use("/api/proyectos", proyectosRoutes); 
+app.use("/api/2fa", twoFARoutes);// 👈 agregada desde tu versión

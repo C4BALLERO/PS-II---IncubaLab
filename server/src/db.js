@@ -5,7 +5,7 @@ import mysql from "mysql2/promise";
 const {
   DB_HOST = "localhost",
   DB_USER = "root",
-  DB_PASSWORD = "Alanes567",
+  DB_PASSWORD = "STARKILLER1475369",
   DB_NAME = "incuvalab",
   DB_PORT = 3306,
 } = process.env;
