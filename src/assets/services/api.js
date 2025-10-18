@@ -20,15 +20,25 @@ async function request(path, { method = "GET", data, headers } = {}) {
   return payload;
 }
 
-/* Endpoints de usuarios */
-export const getUsers       = (params = {}) => {
+/* -------------------- USERS -------------------- */
+export const getUsers = (params = {}) => {
   const qs = new URLSearchParams(params).toString();
   return request(`/api/users${qs ? `?${qs}` : ""}`);
 };
-export const getUser        = (id)        => request(`/api/users/${id}`);
-export const createUser     = (user)      => request(`/api/users`,       { method: "POST",   data: user });
-export const updateUser     = (id, user)  => request(`/api/users/${id}`, { method: "PUT",    data: user });
-export const softDeleteUser = (id)        => request(`/api/users/${id}`, { method: "DELETE" });
-export const restoreUser    = (id)        => request(`/api/users/${id}/restore`, { method: "PATCH" });
 
+export const getUser = (id) => request(`/api/users/${id}`);
+
+export const createUser = (user) =>
+  request(`/api/users`, { method: "POST", data: user });
+
+export const updateUser = (id, user) =>
+  request(`/api/users/${id}`, { method: "PUT", data: user });
+
+export const softDeleteUser = (id) =>
+  request(`/api/users/${id}`, { method: "DELETE" });
+
+export const restoreUser = (id) =>
+  request(`/api/users/${id}/restore`, { method: "PATCH" });
+
+/* Healthcheck */
 export const ping = () => request(`/`);

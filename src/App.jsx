@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "./assets/layouts/MainLayout";
 
+// Vistas principales
 import Home from "./assets/views/Home";
 import Prueba from "./assets/views/prueba";
 import Profile from "./assets/views/Profile";
@@ -9,14 +10,14 @@ import Profile from "./assets/views/Profile";
 // FAQ
 import Faq from "./assets/views/Faq";
 
-
 // ABOUT
-import About from "./assets/views/About"; 
+import About from "./assets/views/About";
+
 // Auth
 import Login from "./assets/views/login";
 import Register from "./assets/views/register";
 
-// NUEVO: Admin Usuarios (CRUD)
+// Admin Usuarios (CRUD)
 import UsersAdmin from "./assets/views/UsersAdmin";
 
 function App() {
@@ -33,14 +34,13 @@ function App() {
 
           {/* NUEVA RUTA: Administración de Usuarios */}
           <Route path="/admin/users" element={<UsersAdmin />} />
-
         </Route>
 
         {/* Rutas sin layout */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* (Opcional) 404 básica */}
+        {/* (Opcional) 404 */}
         {/* <Route path="*" element={<div style={{padding:24}}>Página no encontrada</div>} /> */}
       </Routes>
     </Router>

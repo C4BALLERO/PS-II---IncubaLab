@@ -14,10 +14,12 @@ import {
 const emptyForm = {
   NombreUsuario: "",
   Nombre: "",
-  Apellido: "",
+  PrimerApellido: "",
+  SegundoApellido: "",
   Correo: "",
+  Telefono: "",
   ImagenPerfil: "",
-  Id_Rol: 3,        // Contribuyente por defecto
+  Id_Rol: 2,        // Creador por defecto
   Contrasenia: "",  // <- necesario por NOT NULL en la BD
 };
 
@@ -52,12 +54,16 @@ export default function UsersAdmin() {
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
-    if (!term) return list;
-    return list.filter(
+    const visibles = list.filter((u) => u.Id_Rol !== 3);
+
+    if (!term) return visibles;
+
+    return visibles.filter(
       (u) =>
         u.NombreUsuario?.toLowerCase().includes(term) ||
         u.Nombre?.toLowerCase().includes(term) ||
-        u.Apellido?.toLowerCase().includes(term) ||
+        u.PrimerApellido?.toLowerCase().includes(term) ||
+        u.SegundoApellido?.toLowerCase().includes(term) ||
         u.Correo?.toLowerCase().includes(term)
     );
   }, [list, q]);
@@ -76,11 +82,13 @@ export default function UsersAdmin() {
       setForm({
         NombreUsuario: u.NombreUsuario ?? "",
         Nombre: u.Nombre ?? "",
-        Apellido: u.Apellido ?? "",
+        PrimerApellido: u.PrimerApellido ?? "",
+        SegundoApellido: u.SegundoApellido ?? "",
         Correo: u.Correo ?? "",
+        Telefono: u.Telefono ?? "",
         ImagenPerfil: u.ImagenPerfil ?? "",
-        Id_Rol: u.Id_Rol ?? 3,
-        Contrasenia: "", // al editar, contraseña opcional (vacía = no cambiar)
+        Id_Rol: u.Id_Rol ?? 2,
+        Contrasenia: "",
       });
       setShowPwd(false);
     } catch (e) {
@@ -98,15 +106,13 @@ export default function UsersAdmin() {
     try {
       const payload = {
         ...form,
-        Id_Rol: Number(form.Id_Rol) || 3,
+        Id_Rol: Number(form.Id_Rol) || 2,
       };
 
       if (editingId) {
-        // si no se escribió nueva contraseña, no la envíes
         if (!payload.Contrasenia) delete payload.Contrasenia;
         await updateUser(editingId, payload);
       } else {
-        // creando: la contraseña es obligatoria (BD: NOT NULL)
         if (!payload.Contrasenia || payload.Contrasenia.length < 6) {
           throw new Error("La contraseña es obligatoria (mínimo 6 caracteres).");
         }
@@ -146,7 +152,6 @@ export default function UsersAdmin() {
       <header className="ua-header">
         <div>
           <h1>Administración de Usuarios</h1>
-          <p className="ua-sub">CRUD con eliminación lógica</p>
         </div>
         <div className="ua-controls">
           <input
@@ -163,9 +168,6 @@ export default function UsersAdmin() {
             />
             Mostrar eliminados
           </label>
-          <button className="ua-primary" onClick={startCreate}>
-            + Agregar usuario
-          </button>
         </div>
       </header>
 
@@ -181,7 +183,7 @@ export default function UsersAdmin() {
             filtered.map((u) => (
               <article
                 key={u.IdUser}
-                className={`ua-card ${u.Eliminado ? "is-deleted" : ""}`}
+                className={`ua-card ${u.Estado === 0 ? "is-deleted" : ""}`}
               >
                 <div className="ua-card-body">
                   <div className="ua-avatar">
@@ -195,13 +197,13 @@ export default function UsersAdmin() {
                   </div>
                   <div className="ua-info">
                     <h3>
-                      {u.Nombre} {u.Apellido}{" "}
+                      {u.Nombre} {u.PrimerApellido} {u.SegundoApellido}{" "}
                       <span className="ua-muted">(@{u.NombreUsuario})</span>
                     </h3>
                     <p className="ua-muted">{u.Correo}</p>
                     <p className="ua-meta">
-                      Rol: {u.Id_Rol === 1 ? "Admin" : u.Id_Rol === 2 ? "Creador" : "Contribuyente"}
-                      {u.Eliminado ? (
+                      Rol: {u.Id_Rol === 1 ? "Admin" : "Creador"}
+                      {u.Estado === 0 ? (
                         <span className="ua-badge danger">eliminado</span>
                       ) : null}
                     </p>
@@ -210,7 +212,7 @@ export default function UsersAdmin() {
 
                 <div className="ua-actions">
                   <button onClick={() => startEdit(u.IdUser)}>Editar</button>
-                  {u.Eliminado ? (
+                  {u.Estado === 0 ? (
                     <button className="ua-success" onClick={() => onRestore(u.IdUser)}>
                       Restaurar
                     </button>
@@ -241,17 +243,46 @@ export default function UsersAdmin() {
               Nombre
               <input
                 value={form.Nombre}
-                onChange={(e) => setForm({ ...form, Nombre: e.target.value })}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^[a-zA-ZñÑ\s]*$/.test(val)) {
+                    setForm({ ...form, Nombre: val });
+                  }
+                }}
+                pattern="[A-Za-zñÑ\s]+"
+                title="Solo letras y espacios"
                 required
               />
             </label>
 
             <label>
-              Apellido
+              Primer Apellido
               <input
-                value={form.Apellido}
-                onChange={(e) => setForm({ ...form, Apellido: e.target.value })}
+                value={form.PrimerApellido}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^[a-zA-ZñÑ\s]*$/.test(val)) {
+                    setForm({ ...form, PrimerApellido: val });
+                  }
+                }}
+                pattern="[A-Za-zñÑ\s]+"
+                title="Solo letras y espacios"
                 required
+              />
+            </label>
+
+            <label>
+              Segundo Apellido
+              <input
+                value={form.SegundoApellido}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^[a-zA-ZñÑ\s]*$/.test(val)) {
+                    setForm({ ...form, SegundoApellido: val });
+                  }
+                }}
+                pattern="[A-Za-zñÑ\s]+"
+                title="Solo letras y espacios"
               />
             </label>
 
@@ -266,6 +297,26 @@ export default function UsersAdmin() {
             </label>
 
             <label className="ua-col-2">
+              Teléfono
+              <input
+                type="text"
+                value={form.Telefono}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^\d{0,8}$/.test(val)) {
+                    setForm({ ...form, Telefono: val });
+                  }
+                }}
+                pattern="\d{8}"
+                title="Debe tener exactamente 8 dígitos"
+                maxLength={8}
+                minLength={8}
+                placeholder="Ej: 98765432"
+                required
+              />
+            </label>
+
+            <label className="ua-col-2">
               Imagen (URL)
               <input
                 value={form.ImagenPerfil}
@@ -274,7 +325,6 @@ export default function UsersAdmin() {
               />
             </label>
 
-            {/* Contraseña: obligatoria al crear, opcional al editar */}
             <label className="ua-col-2">
               Contraseña {editingId ? <span className="ua-muted">(opcional)</span> : null}
               <div style={{ display: "flex", gap: 8 }}>
@@ -303,7 +353,6 @@ export default function UsersAdmin() {
               >
                 <option value={1}>Admin</option>
                 <option value={2}>Creador</option>
-                <option value={3}>Contribuyente</option>
               </select>
             </label>
 

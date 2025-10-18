@@ -1,84 +1,143 @@
 // server/src/controllers/users.controller.js
 import { pool } from "../db.js";
 
-// LISTAR (con soporte para includeDeleted)
+/* LISTAR */
 export async function getUsers(req, res) {
   try {
     const includeDeleted =
-      req.query.includeDeleted === "1" ||
-      req.query.includeDeleted === "true";
+      req.query.includeDeleted === "1" || req.query.includeDeleted === "true";
+
+    const where = includeDeleted ? "" : "WHERE Estado = 1";
 
     const sql = `
-      SELECT 
-        IdUser, NombreUsuario, Nombre, Apellido, ImagenPerfil, Correo, 
-        Id_Rol, FechaCreacion, FechaModificacion, Eliminado, FechaEliminacion
+      SELECT
+        IdUser,
+        NombreUsuario,
+        Nombre,
+        PrimerApellido,
+        SegundoApellido,
+        ImagenPerfil,
+        Correo,
+        Telefono,
+        Estado,
+        Id_Rol,
+        FechaCreacion
       FROM Usuario
-      ${includeDeleted ? "" : "WHERE Eliminado = 0"}
+      ${where}
       ORDER BY IdUser DESC
     `;
-
     const [rows] = await pool.query(sql);
     res.json(rows);
   } catch (e) {
+    console.error("❌ getUsers:", e);
     res.status(500).json({ error: e.message });
   }
 }
 
+/* OBTENER POR ID */
 export async function getUserById(req, res) {
   try {
     const { id } = req.params;
     const [rows] = await pool.query(
-      `SELECT 
-         IdUser, NombreUsuario, Nombre, Apellido, ImagenPerfil, Correo, 
-         Id_Rol, FechaCreacion, FechaModificacion, Eliminado, FechaEliminacion
-       FROM Usuario
-       WHERE IdUser = ?`,
+      `
+      SELECT
+        IdUser,
+        NombreUsuario,
+        Nombre,
+        PrimerApellido,
+        SegundoApellido,
+        ImagenPerfil,
+        Correo,
+        Telefono,
+        Estado,
+        Id_Rol,
+        FechaCreacion
+      FROM Usuario
+      WHERE IdUser = ?
+    `,
       [id]
     );
     if (rows.length === 0) return res.status(404).json({ error: "No encontrado" });
     res.json(rows[0]);
   } catch (e) {
+    console.error("❌ getUserById:", e);
     res.status(500).json({ error: e.message });
   }
 }
 
+/* CREAR */
 export async function createUser(req, res) {
   try {
     const {
       NombreUsuario,
       Nombre,
-      Apellido,
+      PrimerApellido,
+      SegundoApellido = null,
       ImagenPerfil = null,
       Correo,
-      Contrasenia = "",   // por si no llega, evita NOT NULL
-      Id_Rol = 3,
+      Contrasenia = "",
+      Telefono = null,
+      Id_Rol = 2,
+      Estado = 1,
     } = req.body;
 
     const [result] = await pool.query(
-      `INSERT INTO Usuario
-       (NombreUsuario, Nombre, Apellido, ImagenPerfil, Correo, Contrasenia, Id_Rol)
-       VALUES (?,?,?,?,?,?,?)`,
-      [NombreUsuario, Nombre, Apellido, ImagenPerfil, Correo, Contrasenia, Id_Rol]
+      `
+      INSERT INTO Usuario
+        (NombreUsuario, Nombre, PrimerApellido, SegundoApellido, ImagenPerfil,
+         Correo, Contrasenia, Telefono, Estado, Id_Rol)
+      VALUES (?,?,?,?,?,?,?,?,?,?)
+    `,
+      [
+        NombreUsuario,
+        Nombre,
+        PrimerApellido,
+        SegundoApellido,
+        ImagenPerfil,
+        Correo,
+        Contrasenia,
+        Telefono,
+        Estado,
+        Id_Rol,
+      ]
     );
+
     res.status(201).json({ IdUser: result.insertId });
   } catch (e) {
+    console.error("❌ createUser:", e);
     res.status(500).json({ error: e.message });
   }
 }
 
+/* ACTUALIZAR */
 export async function updateUser(req, res) {
   try {
     const { id } = req.params;
-    const fields = ["NombreUsuario", "Nombre", "Apellido", "ImagenPerfil", "Correo", "Contrasenia", "Id_Rol"];
+    const body = { ...req.body };
+
+    const fields = [
+      "NombreUsuario",
+      "Nombre",
+      "PrimerApellido",
+      "SegundoApellido",
+      "ImagenPerfil",
+      "Correo",
+      "Contrasenia",
+      "Telefono",
+      "Estado",
+      "Id_Rol",
+    ];
+
     const sets = [];
     const values = [];
-
     for (const f of fields) {
-      if (f in req.body) {
+      if (Object.prototype.hasOwnProperty.call(body, f)) {
+        if (f === "Contrasenia" && !body[f]) continue;
         sets.push(`${f} = ?`);
-        values.push(req.body[f]);
+        values.push(body[f]);
       }
     }
+
     if (sets.length === 0) return res.status(400).json({ error: "Nada para actualizar" });
 
     values.push(id);
@@ -86,43 +145,43 @@ export async function updateUser(req, res) {
       `UPDATE Usuario SET ${sets.join(", ")} WHERE IdUser = ?`,
       values
     );
+
     if (result.affectedRows === 0) return res.status(404).json({ error: "No encontrado" });
     res.json({ ok: true });
   } catch (e) {
+    console.error("❌ updateUser:", e);
     res.status(500).json({ error: e.message });
   }
 }
 
-// ELIMINACIÓN LÓGICA
+/* ELIMINACIÓN LÓGICA */
 export async function deleteUser(req, res) {
   try {
     const { id } = req.params;
     const [result] = await pool.query(
-      `UPDATE Usuario 
-         SET Eliminado = 1, FechaEliminacion = NOW() 
-       WHERE IdUser = ? AND Eliminado = 0`,
+      `UPDATE Usuario SET Estado = 0 WHERE IdUser = ? AND Estado <> 0`,
       [id]
     );
-    if (result.affectedRows === 0) return res.status(404).json({ error: "No encontrado" });
+    if (result.affectedRows === 0) return res.status(404).json({ error: "No encontrado o ya inactivo" });
     res.json({ ok: true });
   } catch (e) {
+    console.error("❌ deleteUser:", e);
     res.status(500).json({ error: e.message });
   }
 }
 
-// RESTAURAR
+/* RESTAURAR */
 export async function restoreUser(req, res) {
   try {
     const { id } = req.params;
     const [result] = await pool.query(
-      `UPDATE Usuario 
-         SET Eliminado = 0, FechaEliminacion = NULL 
-       WHERE IdUser = ? AND Eliminado = 1`,
+      `UPDATE Usuario SET Estado = 1 WHERE IdUser = ? AND Estado = 0`,
       [id]
     );
-    if (result.affectedRows === 0) return res.status(404).json({ error: "No encontrado" });
+    if (result.affectedRows === 0) return res.status(404).json({ error: "No encontrado o ya activo" });
     res.json({ ok: true });
   } catch (e) {
+    console.error("❌ restoreUser:", e);
     res.status(500).json({ error: e.message });
   }
 }
