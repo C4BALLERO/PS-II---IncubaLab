@@ -8,9 +8,9 @@ import { fileURLToPath } from "url";
 
 // Rutas
 import usuarioRoutes from "./src/routes/usuarios.js";
-import proyectosRoutes from "./src/routes/proyecto.js"; // 👈 agregado desde tu versión
+import usersRoutes from "./src/routes/users.js";
+import proyectosRoutes from "./src/routes/proyecto.js";
 import twoFARoutes from "./src/routes/2fa.js";
-
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ const app = express();
 // -------------------------------------------------------------
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173", // 👈 agregado: CORS fijo al frontend Vite
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -34,7 +34,7 @@ app.use(express.json());
 // -------------------------------------------------------------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // 👈 agregado
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // -------------------------------------------------------------
 // 💾 POOL DE CONEXIÓN MYSQL
@@ -50,35 +50,31 @@ const db = await mysql.createPool({
 });
 
 // -------------------------------------------------------------
-// 🧪 RUTA DE PRUEBA PARA CONEXIÓN A DB
+// 🧪 FUNCIÓN checkDb() ORIGINAL DEL INDEX
 // -------------------------------------------------------------
-app.get("/test-db", async (req, res) => {
+const checkDb = async () => {
   try {
-    const [rows] = await db.query("SELECT 1 + 1 AS result");
-    res.json({ resultado: rows[0].result });
+    const [rows] = await db.query("SELECT 1");
+    return rows.length > 0;
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error en DB:", err.message);
+    return false;
   }
-});
+};
 
 // -------------------------------------------------------------
 // 🔗 ENDPOINTS BASE
 // -------------------------------------------------------------
-app.get("/", (_req, res) => {
-  res.send("✅ API de Incuvalab activa. Usa POST /proyectos");
-});
+app.get("/", (_req, res) => res.send("API Incuvalab viva"));
 
-app.get("/health", async (_req, res) => {
-  try {
-    const [rows] = await db.query("SELECT 1 AS ok");
-    res.json({ ok: rows?.[0]?.ok === 1 });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: "DB no disponible" });
-  }
+// Ruta para probar conexión DB como en index.js
+app.get("/check-db", async (_req, res) => {
+  const ok = await checkDb();
+  res.json({ dbOk: ok });
 });
 
 // -------------------------------------------------------------
-// 💡 RUTA DIRECTA PARA CREAR PROYECTOS (del server original)
+// 💡 RUTA DIRECTA PARA CREAR PROYECTOS
 // -------------------------------------------------------------
 app.post("/proyectos", async (req, res) => {
   const { titulo, descripcionBreve, descripcionGeneral } = req.body;
@@ -86,7 +82,7 @@ app.post("/proyectos", async (req, res) => {
   if (!titulo || !descripcionGeneral) {
     return res.status(400).json({
       success: false,
-      message: "⚠️ El Título y la Descripción General son obligatorios",
+      message: "El Título y la Descripción General son obligatorios",
     });
   }
 
@@ -110,7 +106,7 @@ app.post("/proyectos", async (req, res) => {
     const [result] = await db.execute(sql, params);
     return res.json({ success: true, id: result.insertId });
   } catch (err) {
-    console.error("❌ Error al insertar:", err.code || err.message);
+    console.error("Error al insertar:", err.code || err.message);
 
     if (err.code === "ER_NO_REFERENCED_ROW_2") {
       return res.status(400).json({
@@ -121,31 +117,37 @@ app.post("/proyectos", async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "❌ Error en el servidor al insertar el proyecto",
+      message: "Error en el servidor al insertar el proyecto",
     });
   }
 });
 
 // -------------------------------------------------------------
-// 🚀 INICIAR SERVIDOR
+// 🧩 RUTAS EXTERNAS
+// -------------------------------------------------------------
+app.use("/api/usuarios", usuarioRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/proyectos", proyectosRoutes);
+app.use("/api/2fa", twoFARoutes);
+
+// -------------------------------------------------------------
+// 🚀 INICIAR SERVIDOR (ahora usa checkDb para validar DB antes de escuchar)
 // -------------------------------------------------------------
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-});
+const start = async () => {
+  try {
+    const ok = await checkDb();
+    console.log(ok ? "DB OK" : "DB check failed");
+    app.listen(PORT, () => console.log(`API escuchando en http://localhost:${PORT}`));
+  } catch (e) {
+    console.error("Error al iniciar:", e);
+    process.exit(1);
+  }
+};
+start();
 
 // Cerrar conexión al salir
 process.on("SIGINT", async () => {
-  try {
-    await db.end();
-  } catch {}
+  try { await db.end(); } catch {}
   process.exit(0);
 });
-
-// -------------------------------------------------------------
-// 🧩 RUTAS EXTERNAS
-// -------------------------------------------------------------
-app.use("/api/usuarios", usuarioRoutes); // fusionado con tu ruta extendida (multer, editar, etc.)
-app.use("/api/proyectos", proyectosRoutes); 
-app.use("/api/2fa", twoFARoutes);// 👈 agregada desde tu versión
-

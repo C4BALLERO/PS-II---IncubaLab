@@ -1,3 +1,4 @@
+// src/App.jsx
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./assets/layouts/MainLayout";
@@ -53,15 +54,17 @@ function App() {
           <Route path="/crear-campania" element={<CrearCampania />} />
           <Route path="/crear-campania-2" element={<CrearCampania2 />} />
 
-          {/* Login/Register redirigen si ya hay usuario */}
-          <Route
-            path="/login"
-            element={!user ? <Login setUser={setUser} /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/register"
-            element={!user ? <Register setUser={setUser} /> : <Navigate to="/" />}
-          />
+          {/* Rutas de admin con layout */}
+          {user?.Id_Rol === 1 && (
+            <>
+              <Route path="/admin/users" element={<UsersAdmin />} />
+              <Route path="/admin/proyectos" element={<CrudProyectos />} />
+              <Route path="/admin/aprobar-proyectos" element={<AceptarProyectos />} />
+              <Route path="/admin/proyectos-removidos" element={<ProyectosRemovidos />} />
+              <Route path="/admin/perfil" element={<Perfil />} />
+              <Route path="/admin/editar/:id" element={<EditarProyecto />} />
+            </>
+          )}
         </Route>
 
         {/* ----------------- Rutas protegidas ----------------- */}
@@ -82,55 +85,18 @@ function App() {
           }
         />
 
-        {/* ----------------- Rutas admin (role = 1) ----------------- */}
+        {/* ----------------- Login/Register ----------------- */}
         <Route
-          path="/admin/users"
-          element={
-            <PrivateRoute user={user} role={1}>
-              <UsersAdmin />
-            </PrivateRoute>
-          }
+          path="/login"
+          element={!user ? <Login setUser={setUser} /> : <Navigate to="/" />}
         />
         <Route
-          path="/admin/proyectos"
-          element={
-            <PrivateRoute user={user} role={1}>
-              <CrudProyectos />
-            </PrivateRoute>
-          }
+          path="/register"
+          element={!user ? <Register setUser={setUser} /> : <Navigate to="/" />}
         />
-        <Route
-          path="/admin/aprobar-proyectos"
-          element={
-            <PrivateRoute user={user} role={1}>
-              <AceptarProyectos />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/proyectos-removidos"
-          element={
-            <PrivateRoute user={user} role={1}>
-              <ProyectosRemovidos />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/perfil"
-          element={
-            <PrivateRoute user={user} role={1}>
-              <Perfil />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/editar/:id"
-          element={
-            <PrivateRoute user={user} role={1}>
-              <EditarProyecto />
-            </PrivateRoute>
-          }
-        />
+
+        {/* ----------------- (Opcional) 404 ----------------- */}
+        {/* <Route path="*" element={<div style={{ padding: 24 }}>Página no encontrada</div>} /> */}
       </Routes>
     </Router>
   );
