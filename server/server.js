@@ -8,7 +8,6 @@ import { fileURLToPath } from "url";
 
 // Rutas
 import usuarioRoutes from "./src/routes/usuarios.js";
-import usersRoutes from "./src/routes/users.js"; // Rutas originales de tu compañero
 import proyectosRoutes from "./src/routes/proyecto.js"; // 👈 agregado desde tu versión
 import twoFARoutes from "./src/routes/2fa.js";
 
@@ -147,6 +146,6 @@ process.on("SIGINT", async () => {
 // 🧩 RUTAS EXTERNAS
 // -------------------------------------------------------------
 app.use("/api/usuarios", usuarioRoutes); // fusionado con tu ruta extendida (multer, editar, etc.)
-app.use("/users", usersRoutes);
 app.use("/api/proyectos", proyectosRoutes); 
 app.use("/api/2fa", twoFARoutes);// 👈 agregada desde tu versión
+

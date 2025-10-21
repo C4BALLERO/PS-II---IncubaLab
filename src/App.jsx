@@ -24,6 +24,7 @@ import ProyectosRemovidos from "./assets/views/admin/ProyectosRemovidos";
 import Perfil from "./assets/views/admin/Perfil";
 import Configurar2FA from "./assets/views/Configurar2FA";
 import Profile from "./assets/views/Profile";
+import EditarProyecto from "./assets/views/admin/EditarProyecto";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -119,6 +120,14 @@ function App() {
           element={
             <PrivateRoute user={user} role={1}>
               <Perfil />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/editar/:id"
+          element={
+            <PrivateRoute user={user} role={1}>
+              <EditarProyecto />
             </PrivateRoute>
           }
         />
