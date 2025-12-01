@@ -22,7 +22,7 @@ function EditarProyecto() {
   // Cargar datos del proyecto
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/proyectos/${id}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/proyectos/${id}`)
       .then((res) => {
         const proyecto = res.data;
         setFormData({
@@ -34,7 +34,7 @@ function EditarProyecto() {
           Video: proyecto.Video || "",
           ImagenPrincipal: null,
         });
-        setPreview(proyecto.ImagenPrincipal ? `http://localhost:4000${proyecto.ImagenPrincipal}` : null);
+        setPreview(proyecto.ImagenPrincipal ? `${import.meta.env.VITE_API_URL}${proyecto.ImagenPrincipal}` : null);
       })
       .catch((err) => {
         console.error(err);
@@ -67,7 +67,7 @@ function EditarProyecto() {
     data.append("ModificadoPor", 1); // Cambiar al IdUser que edita
 
     try {
-      await axios.put(`http://localhost:4000/api/proyectos/editar/${id}`, data, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/proyectos/editar/${id}`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("Proyecto actualizado correctamente");

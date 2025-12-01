@@ -1,6 +1,4 @@
 /* src/styles/Profile.css */
-
-/* Bloquear modo oscuro */
 :root {
   color-scheme: light !important;
 }
@@ -11,7 +9,7 @@
   grid-template-columns: 1fr;
   gap: 20px;
   padding: 20px;
-  background: #e6e6e6 !important;
+  background: #8a1538 !important;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -265,9 +263,7 @@
   text-decoration: underline;
 }
 
-/* ---------------------- */
 /* MODAL MEJORADO         */
-/* ---------------------- */
 .modal-overlay {
   position: fixed;
   inset: 0;

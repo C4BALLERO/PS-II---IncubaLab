@@ -4,29 +4,41 @@
   padding: 5rem;
   font-family: Arial, sans-serif;
   color: black;
+  flex-wrap: wrap; /* permite que los hijos bajen si es necesario */
 }
 
+/* Avatar */
+.imgAvatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Panel izquierdo */
 .perfil-left {
   flex: 1;
   max-width: 400px;
-  background: #EBEBEB;
-  padding: 1.5rem;
+  background: #f9f9f9;
+  padding-top: 10rem;
   border-radius: 10px;
   text-align: center;
   color: black;
 }
 
+/* Avatar */
 .perfil-avatar {
-  font-size: 3rem;
-  margin: 0 auto 1rem; 
-  color: #EBEBEB;
-  background-color: #880430;
-  width: 80px; 
-  height: 80px; 
-  border-radius: 50%;
-  display: flex;    
-  justify-content: center; 
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 15px;
+  background: #8a1538;
+  color: white;
+  font-size: 2.5rem;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
 }
 
 .username {
@@ -65,16 +77,16 @@
   text-align: center;
 }
 
+/* Panel derecho */
 .perfil-right {
   flex: 2;
   background: #f1f1f1;
-  padding: 1.5rem;
   border-radius: 10px;
 }
 
+/* Panel secciones */
 .panel-section {
   background: white;
-  margin-bottom: 1rem;
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid #ddd;
@@ -85,8 +97,10 @@
   justify-content: space-between;
   align-items: center;
   background: #66b5cb;
-  padding: 0.8rem;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
   cursor: pointer;
+  color: white;
 }
 
 .panel-body {
@@ -103,6 +117,7 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 2rem;
+  margin-top: 2rem;
 }
 
 .dashboard-card {
@@ -147,4 +162,48 @@
 .dashboard-card:hover .dashboard-icon,
 .dashboard-card:hover h2 {
   color: #66b5cb;
+}
+
+/* ==============================
+   MEDIA QUERIES
+   ============================== */
+
+/* Móvil: perfil debajo del panel izquierdo */
+@media (max-width: 768px) {
+  .perfil-container {
+    flex-direction: column;
+    padding: 3rem;
+  }
+
+  .perfil-left {
+    padding-top: 2rem;
+  }
+
+  .perfil-right {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+}
+
+/* Ajustes móviles pequeños */
+@media (max-width: 480px) {
+  .dashboard-card h2 {
+    font-size: 16px;
+  }
+
+  .dashboard-card p {
+    font-size: 13px;
+  }
+
+  .dashboard-icon {
+    font-size: 40px;
+  }
+
+  .perfil-left {
+    padding: 1.5rem 1rem;
+  }
+
+  .perfil-right {
+    padding: 1rem;
+  }
 }

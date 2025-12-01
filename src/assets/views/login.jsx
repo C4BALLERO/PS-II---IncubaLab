@@ -16,7 +16,7 @@ const Login = ({ setUser }) => {
     const password = e.target.password.value;
 
     try {
-      const res = await fetch("http://localhost:4000/api/usuarios/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -29,16 +29,19 @@ const Login = ({ setUser }) => {
         return;
       }
 
-      // 🔍 Si el usuario tiene 2FA activo, pedimos el código
+      // Si el usuario tiene 2FA activo, pedimos el código
       if (data.user && data.user.DobleFactorActivo === true) {
         setTempUser(data.user);
         setIs2FAOpen(true);
       } else {
-        // ✅ Si no tiene 2FA, inicia sesión directo
+        // Si no tiene 2FA, inicia sesión directo
         localStorage.setItem("user", JSON.stringify(data.user));
         window.dispatchEvent(new Event("auth-changed"));
         setUser(data.user);
-        navigate("/profile");
+
+        // 🔹 Redirigir según rol
+        if (data.user.Id_Rol === 1) navigate("/admin/perfil"); // admin
+        else navigate("/profile"); // usuario normal
       }
     } catch (error) {
       console.error("Error en login:", error);
@@ -48,31 +51,33 @@ const Login = ({ setUser }) => {
 
   const handleVerify2FA = async () => {
     if (!code || code.length !== 6) {
-      alert("⚠️ Ingrese el código completo de 6 dígitos.");
+      alert(" Ingrese el código completo de 6 dígitos.");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:4000/api/usuarios/verify-2fa", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/verify-2fa`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // 🔑 Cambié "code" a "token" para coincidir con backend
         body: JSON.stringify({ userId: tempUser.IdUser, token: code }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Código inválido ❌");
+        alert(data.error || "Código inválido");
         return;
       }
 
-      // ✅ Código correcto → guarda sesión
+      // Código correcto → guarda sesión
       localStorage.setItem("user", JSON.stringify(tempUser));
       window.dispatchEvent(new Event("auth-changed"));
       setUser(tempUser);
       setIs2FAOpen(false);
-      navigate("/profile");
+
+      // 🔹 Redirigir según rol
+      if (tempUser.Id_Rol === 1) navigate("/admin/perfil"); // admin
+      else navigate("/profile"); // usuario normal
     } catch (err) {
       console.error("Error verificando 2FA:", err);
       alert("Ocurrió un error verificando el código");
@@ -128,6 +133,10 @@ const Login = ({ setUser }) => {
           <p>¿No tienes una cuenta?</p>
           <Link to="/register" className="register-btn">
             Regístrate
+          </Link>
+          <br />
+          <Link to="/">
+          Volver a la pagina principal
           </Link>
         </div>
       </div>

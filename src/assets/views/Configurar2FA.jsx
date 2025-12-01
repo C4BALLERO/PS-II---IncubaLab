@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "../../styles/2faSeguridad.css";
 
 export default function Configurar2FA({ userId }) {
   const [isActive, setIsActive] = useState(false);
@@ -7,11 +9,13 @@ export default function Configurar2FA({ userId }) {
   const [token, setToken] = useState("");
   const [verified, setVerified] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetch2FAStatus = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/2fa/status/${userId}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/2fa/status/${userId}`);
         setIsActive(res.data.isActive);
         setVerified(res.data.isActive);
       } catch (error) {
@@ -24,7 +28,7 @@ export default function Configurar2FA({ userId }) {
   const handleToggle = async () => {
     if (!isActive) {
       try {
-        const res = await axios.post("http://localhost:4000/api/2fa/generate", { userId });
+        const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/2fa/generate`, { userId });
         setQr(res.data.qrImage);
         setModalOpen(true); // Abrir modal para QR
       } catch (error) {
@@ -33,11 +37,11 @@ export default function Configurar2FA({ userId }) {
       }
     } else {
       try {
-        await axios.post("http://localhost:4000/api/2fa/disable", { userId });
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/2fa/disable`, { userId });
         setVerified(false);
         setQr(null);
         setIsActive(false);
-        alert("✅ Doble factor desactivado correctamente");
+        alert("Doble factor desactivado correctamente");
       } catch (error) {
         console.error(error);
         alert("Error desactivando 2FA");
@@ -47,14 +51,14 @@ export default function Configurar2FA({ userId }) {
 
   const handleVerify = async () => {
     try {
-      const res = await axios.post("http://localhost:4000/api/2fa/verify", { userId, token });
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/2fa/verify`, { userId, token });
       if (res.data.success) {
         setVerified(true);
         setModalOpen(false);
         setIsActive(true);
-        alert("✅ Doble factor activado correctamente");
+        alert("Doble factor activado correctamente");
       } else {
-        alert("❌ Código incorrecto");
+        alert("Código incorrecto");
       }
     } catch (error) {
       console.error(error);
@@ -65,14 +69,14 @@ export default function Configurar2FA({ userId }) {
   return (
     <div className="p-8 flex justify-center">
       <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md flex flex-col gap-6">
-        <h1 className="text-2xl font-bold text-gray-800 text-center">Seguridad de la cuenta</h1>
-        <p className="text-gray-600 text-center">
-          Configura tu autenticación de doble factor para mayor seguridad.
-        </p>
+        <h1 className="titulo">Seguridad de <span className="ColorTitulo">la cuenta</span></h1>
 
         {/* Switch moderno */}
-        <div className="flex justify-between items-center">
-          <span className="font-medium text-gray-700">Doble factor (2FA)</span>
+        <div className="DobleConf">
+          <p className="">
+          Configura tu autenticación de doble factor para mayor seguridad.
+          </p>
+          <span className="">Doble factor (2FA) </span>
           <button
             onClick={handleToggle}
             className={`w-16 h-8 flex items-center rounded-full p-1 transition-colors duration-300 ${
@@ -85,10 +89,14 @@ export default function Configurar2FA({ userId }) {
               }`}
             ></div>
           </button>
+          <br />
+          <button onClick={() => navigate(-1)} className="btn-volverA">
+            ← Volver
+          </button>
         </div>
 
         {verified && (
-          <p className="text-green-600 font-semibold text-center mt-2">✅ 2FA activado</p>
+          <p className="text-green-600 font-semibold text-center mt-2">2FA activado</p>
         )}
       </div>
 
@@ -108,7 +116,7 @@ export default function Configurar2FA({ userId }) {
               value={token}
               onChange={(e) => setToken(e.target.value.replace(/\D/g, ""))}
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-evenly", padding: "10px"}}>
               <button onClick={handleVerify} style={verifyBtn}>
                 Verificar
               </button>
@@ -145,6 +153,8 @@ const modalStyle = {
   textAlign: "center",
   boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
   color: "black",
+  display: "grid",
+  justifyItems: "center"
 };
 
 const verifyBtn = {

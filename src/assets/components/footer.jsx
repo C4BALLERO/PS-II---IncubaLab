@@ -1,12 +1,13 @@
 import "../../styles/Footer.css";
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaTiktok } from 'react-icons/fa';
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-top">
         <div className="footer-section">
           <h4>Nuestra Sección</h4>
-          <a href="#">Sobre Nosotros</a>
+          <Link to="/sobre-nosotros">Sobre Nosotros</Link>
           <a href="#">Nuestros Servicios</a>
           <a href="#">Política de Privacidad</a>
           <a href="#">Programas Afiliados</a>

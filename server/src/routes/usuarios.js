@@ -5,10 +5,11 @@ import path from "path";
 import multer from "multer";
 import speakeasy from "speakeasy"; 
 import Usuario from "../models/usuario.js";
+import bcrypt from "bcrypt";
 
 const router = express.Router();
 
-// 🧩 Multer para subir imágenes
+// Multer para subir imágenes
 const storage = multer.diskStorage({
   destination: "./uploads/",
   filename: (req, file, cb) => {
@@ -17,46 +18,91 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// 🧍 Registro
-router.post("/", (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-  const nuevoUsuario = {
-    NombreUsuario: email.split("@")[0],
-    Nombre: firstName,
-    PrimerApellido: lastName,
-    SegundoApellido: null,
-    ImagenPerfil: null,
-    Correo: email,
-    Contrasenia: password,
-    CodigoSecreto: null,
-    DobleFactorActivo: 0,
-    Telefono: null,
-    Estado: 1,
-    Id_Rol: 1,
-  };
+router.post("/", async (req, res) => {
+  try {
+    const { firstName, lastName, secondLastName, email, username, password, phone } = req.body;
 
-  Usuario.create(nuevoUsuario, (err, results) => {
-    if (err) return res.status(500).json({ error: "Error en el registro" });
-    res.json({ id: results.insertId, ...nuevoUsuario });
-  });
+    // Validaciones
+    if (!firstName || !lastName || !email || !username || !password) {
+      return res.status(400).json({ error: "Todos los campos obligatorios deben ser completados" });
+    }
+
+    // Email válido
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Correo inválido" });
+    }
+
+    // Contraseña válida
+    if (password.length < 8 || password.length > 20) {
+      return res.status(400).json({ error: "La contraseña debe tener entre 8 y 20 caracteres" });
+    }
+
+    // Teléfono válido (opcional)
+    if (phone && !/^(?:\+591)?[67]\d{7}$/.test(phone)) {
+      return res.status(400).json({ error: "Número de teléfono inválido" });
+    }
+
+    // Verificar si email existe
+    Usuario.getByEmail(email, async (err, results) => {
+      if (err) return res.status(500).json({ error: "Error en el servidor al consultar email", details: err.message });
+      if (results.length) return res.status(400).json({ error: "Correo ya registrado" });
+
+      // Verificar si username existe
+      Usuario.getByUsername(username, async (err2, results2) => {
+        if (err2) return res.status(500).json({ error: "Error en el servidor al consultar username", details: err2.message });
+        if (results2.length) return res.status(400).json({ error: "Nombre de usuario ya registrado" });
+
+        // Hash de contraseña
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const nuevoUsuario = {
+          NombreUsuario: username,
+          Nombre: firstName,
+          PrimerApellido: lastName,
+          SegundoApellido: secondLastName || null,
+          ImagenPerfil: null,
+          Correo: email,
+          Contrasenia: hashedPassword,
+          CodigoSecreto: null,
+          DobleFactorActivo: 0,
+          Telefono: phone || null,
+          Estado: 1,
+          Id_Rol: 2,
+        };
+
+        Usuario.create(nuevoUsuario, (err3, results3) => {
+          if (err3) return res.status(500).json({ error: "Error creando usuario", details: err3.message });
+          res.json({ id: results3.insertId, ...nuevoUsuario });
+        });
+      });
+    });
+  } catch (error) {
+    console.error("Error en el registro:", error);
+    res.status(500).json({ error: "Error procesando el registro", details: error.message });
+  }
 });
-
-// 🔐 Login (ya está funcional, lo dejamos intacto)
-router.post("/login", (req, res) => {
+// Login
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  Usuario.getByEmail(email, (err, results) => {
+  Usuario.getByEmail(email, async (err, results) => {
     if (err) return res.status(500).json({ error: "Error en servidor" });
     if (!results.length) return res.status(401).json({ error: "Usuario no encontrado" });
+
     const user = results[0];
-    if (user.Contrasenia !== password) return res.status(401).json({ error: "Contraseña incorrecta" });
+
+    // Comparar contraseña con hash
+    const match = await bcrypt.compare(password, user.Contrasenia);
+    if (!match) return res.status(401).json({ error: "Contraseña incorrecta" });
+
     user.DobleFactorActivo = Boolean(user.DobleFactorActivo);
     res.json({ message: "Login exitoso", user });
   });
 });
 
-// 🔐 Verificación 2FA
+// Verificación 2FA
 router.post("/verify-2fa", (req, res) => {
-  const { userId, token } = req.body; // ⚠️ cambiado a "token"
+  const { userId, token } = req.body;
 
   if (!userId || !token)
     return res.status(400).json({ error: "Faltan datos obligatorios" });
@@ -82,7 +128,7 @@ router.post("/verify-2fa", (req, res) => {
   });
 });
 
-// 🔹 Desactivar 2FA
+// Desactivar 2FA
 router.post("/disable-2fa", (req, res) => {
   const { userId } = req.body;
   if (!userId) return res.status(400).json({ error: "Faltan datos obligatorios" });
@@ -93,7 +139,7 @@ router.post("/disable-2fa", (req, res) => {
   });
 });
 
-// 🔹 Estado 2FA
+// Estado 2FA
 router.get("/2fa-status/:userId", (req, res) => {
   const { userId } = req.params;
 
@@ -104,7 +150,7 @@ router.get("/2fa-status/:userId", (req, res) => {
   });
 });
 
-// 🔄 Recuperar contraseña (sin cambios)
+// Recuperar contraseña
 const passwordResetTokens = {};
 router.post("/send-token", async (req, res) => {
   const { email } = req.body;
@@ -152,26 +198,35 @@ router.post("/validate-token", (req, res) => {
   res.json({ success: true, message: "Token válido" });
 });
 
-router.post("/reset-password", (req, res) => {
-  const { email, token, newPassword } = req.body;
-  const stored = passwordResetTokens[email];
-  if (!stored) return res.status(400).json({ error: "Token no generado" });
-  if (!stored.validated) return res.status(400).json({ error: "Token no validado aún" });
-  if (stored.token !== token) return res.status(400).json({ error: "Token inválido" });
-  if (Date.now() > stored.expiresAt) return res.status(400).json({ error: "Token expirado" });
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { email, token, newPassword } = req.body;
+    const stored = passwordResetTokens[email];
+    if (!stored) return res.status(400).json({ error: "Token no generado" });
+    if (!stored.validated) return res.status(400).json({ error: "Token no validado aún" });
+    if (stored.token !== token) return res.status(400).json({ error: "Token inválido" });
+    if (Date.now() > stored.expiresAt) return res.status(400).json({ error: "Token expirado" });
 
-  Usuario.updateByEmail(email, { Contrasenia: newPassword }, (err) => {
-    if (err) return res.status(500).json({ error: "Error actualizando contraseña" });
-    delete passwordResetTokens[email];
-    res.json({ success: true, message: "Contraseña actualizada correctamente" });
-  });
+    // Encriptar nueva contraseña antes de actualizar
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    Usuario.updateByEmail(email, { Contrasenia: hashedPassword }, (err) => {
+      if (err) return res.status(500).json({ error: "Error actualizando contraseña" });
+      delete passwordResetTokens[email];
+      res.json({ success: true, message: "Contraseña actualizada correctamente" });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error procesando la nueva contraseña" });
+  }
 });
 
-// ✏️ Editar perfil
+// Editar perfil
 router.put("/editar/:id", upload.single("imagen"), (req, res) => {
   const { id } = req.params;
   const data = req.body;
-  if (req.file) data.ImagenPerfil = "/uploads/" + req.file.filename;
+  if (req.file) data.ImagenPerfil = `http://localhost:4000/uploads/${req.file.filename}`;
 
   Usuario.update(id, data, (err) => {
     if (err) return res.status(500).json({ error: "Error al actualizar usuario" });

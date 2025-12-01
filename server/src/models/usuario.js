@@ -12,10 +12,7 @@ const Usuario = {
 
   getById: async (id, callback) => {
     try {
-      const [rows] = await pool.query(
-        "SELECT * FROM Usuario WHERE IdUser = ?",
-        [id]
-      );
+      const [rows] = await pool.query("SELECT * FROM Usuario WHERE IdUser = ?", [id]);
       callback(null, rows);
     } catch (err) {
       callback(err, null);
@@ -24,10 +21,16 @@ const Usuario = {
 
   getByEmail: async (email, callback) => {
     try {
-      const [rows] = await pool.query(
-        "SELECT * FROM Usuario WHERE Correo = ?",
-        [email]
-      );
+      const [rows] = await pool.query("SELECT * FROM Usuario WHERE Correo = ?", [email]);
+      callback(null, rows);
+    } catch (err) {
+      callback(err, null);
+    }
+  },
+
+  getByUsername: async (username, callback) => {
+    try {
+      const [rows] = await pool.query("SELECT * FROM Usuario WHERE NombreUsuario = ?", [username]);
       callback(null, rows);
     } catch (err) {
       callback(err, null);
@@ -45,22 +48,7 @@ const Usuario = {
 
   update: async (id, data, callback) => {
     try {
-      const [result] = await pool.query(
-        "UPDATE Usuario SET ? WHERE IdUser = ?",
-        [data, id]
-      );
-      callback(null, result);
-    } catch (err) {
-      callback(err, null);
-    }
-  },
-
-  delete: async (id, callback) => {
-    try {
-      const [result] = await pool.query(
-        "DELETE FROM Usuario WHERE IdUser = ?",
-        [id]
-      );
+      const [result] = await pool.query("UPDATE Usuario SET ? WHERE IdUser = ?", [data, id]);
       callback(null, result);
     } catch (err) {
       callback(err, null);
@@ -69,10 +57,7 @@ const Usuario = {
 
   updateByEmail: async (email, data, callback) => {
     try {
-      const [result] = await pool.query(
-        "UPDATE Usuario SET ? WHERE Correo = ?",
-        [data, email]
-      );
+      const [result] = await pool.query("UPDATE Usuario SET ? WHERE Correo = ?", [data, email]);
       callback(null, result);
     } catch (err) {
       callback(err, null);

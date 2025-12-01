@@ -10,15 +10,15 @@ import {
   softDeleteUser,
   restoreUser,
 } from "@/assets/services/api";
-
+import { Link } from "react-router-dom";
 const emptyForm = {
   NombreUsuario: "",
   Nombre: "",
   Apellido: "",
   Correo: "",
   ImagenPerfil: "",
-  Id_Rol: 3,        // Contribuyente por defecto
-  Contrasenia: "",  // <- necesario por NOT NULL en la BD
+  Id_Rol: 2,     
+  Contrasenia: "", 
 };
 
 export default function UsersAdmin() {
@@ -146,7 +146,7 @@ export default function UsersAdmin() {
       <header className="ua-header">
         <div>
           <h1>Administración de Usuarios</h1>
-          <p className="ua-sub">CRUD con eliminación lógica</p>
+          <Link to="/admin/perfil">Volver al Panel de Control</Link>
         </div>
         <div className="ua-controls">
           <input
@@ -185,13 +185,12 @@ export default function UsersAdmin() {
               >
                 <div className="ua-card-body">
                   <div className="ua-avatar">
-                    <img
-                      src={u.ImagenPerfil || `https://i.pravatar.cc/80?u=${u.IdUser}`}
-                      onError={(e) => {
-                        e.currentTarget.src = "https://placehold.co/80x80?text=%F0%9F%91%A4";
-                      }}
-                      alt={u.NombreUsuario}
-                    />
+                    {/* Solo mostrar la imagen que el usuario suba */}
+                    {u.ImagenPerfil ? (
+                      <img src={u.ImagenPerfil} alt={u.NombreUsuario} />
+                    ) : (
+                      <div className="ua-no-avatar">Sin imagen</div>
+                    )}
                   </div>
                   <div className="ua-info">
                     <h3>

@@ -12,12 +12,16 @@
 
 .crud-header h2 {
   font-size: 24px;
-  color: #333;
+  color: white;
   margin: 0;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
+    border: solid 1px;
+  border-radius: 12px;
+  background-color: #66b5cb ;
+  width: 100%;
 }
 
 .crud-header .link-removidos {

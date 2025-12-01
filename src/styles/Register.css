@@ -1,29 +1,4 @@
-/* Importar las tipografías */
 @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Be+Vietnam:ital,wght@0,100..900;1,100..900&display=swap");
-
-/* ELIMINAR TODAS LAS BARRAS DE SCROLL VISIBLES */
-html,
-body {
-  overflow: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  display: none;
-  width: 0;
-}
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-*::-webkit-scrollbar {
-  display: none;
-  width: 0;
-}
 
 .register-page {
   min-height: 100vh;
@@ -31,74 +6,37 @@ body::-webkit-scrollbar {
   flex-direction: column;
 }
 
-/* CONTENEDOR PRINCIPAL CORREGIDO - MÁRGENES EXACTOS */
 .register-container {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem 0;
   background-color: #ebebeb;
-  margin-top: 70px; /* Altura exacta del header */
-  margin-bottom: 0; /* Eliminado porque el footer no es fixed */
-  min-height: calc(100vh - 70px); /* Solo header fixed */
+  min-height: calc(100vh - 70px);
   width: 100%;
   box-sizing: border-box;
 }
 
-/* WRAPPER MANTENIENDO ANCHO COMPLETO ORIGINAL */
 .register-wrapper {
   display: flex;
-  max-width: 100%; /* MANTIENE ANCHO COMPLETO */
-  width: 100%; /* MANTIENE ANCHO COMPLETO */
-  background: #66b5cb; /*aqui registerAAAAHH*/
-  border-radius: 15px;
+  width: 100%;
+  background: #69a7d3;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  min-height: 850px;
-  max-height: 80vh; /* Solo limita la altura vertical */
+  min-height: 100vh;
 }
 
-/* Sección de bienvenida CON ELIPSE SVG OPTIMIZADA */
 .welcome-section {
   flex: 1;
-  background: linear-gradient(
-    135deg,
-    #880430 0%,
-    #66b5cb 100%
-  ); /*aqui registerAAAAHH*/
-  color: white;
-  padding: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-family: "Be Vietnam", sans-serif;
-  position: relative;
-  overflow: hidden; /* Asegurar que la curva no se salga */
-}
-
-/* ELIPSE SVG OPTIMIZADA - CURVA DIAGONAL CONTINUA */
-.welcome-section::before {
-  content: "";
-  position: absolute;
-  width: 200%; /* Más ancho para que la curva sea continua */
-  height: 150%; /* Más alto para mejor cobertura */
-  background-image: url("data:image/svg+xml,%3Csvg width='721' height='670' viewBox='0 0 721 670' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='189.62' cy='334.25' rx='530.847' ry='635.354' transform='rotate(-179.924 189.62 334.25)' fill='%23880430' fill-opacity='0.3'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: -12% center; /* Posición centrada diagonal */
-  background-size: 60% auto; /* Tamaño más controlado */
-  z-index: 0;
-  top: -25%; /* Ajuste vertical para alinear la curva */
-  left: -12%; /* Ajuste horizontal */
-}
-
-.welcome-section h1,
-.welcome-section p,
-.welcome-section .login-prompt {
-  position: relative;
-  z-index: 1;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  background: #7a0c3f;
+  color: white;
 }
 
 .welcome-section h1 {
@@ -126,7 +64,7 @@ body::-webkit-scrollbar {
   font-family: "Be Vietnam", sans-serif;
 }
 
-.welcome-section .login-link {
+.login-link {
   color: white;
   text-decoration: none;
   font-weight: 600;
@@ -139,29 +77,23 @@ body::-webkit-scrollbar {
   font-family: "Be Vietnam", sans-serif;
 }
 
-.welcome-section .login-link:hover {
+.login-link:hover {
   background: white;
   color: #880430;
 }
 
-/* Sección del formulario - SCROLL MEJORADO */
 .form-section {
   flex: 1;
-  padding: 3rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Cambiado para mejor scroll */
+  justify-content: center;
   font-family: "Be Vietnam", sans-serif;
-  overflow-y: auto;
-  max-height: 100%; /* Usar altura completa del wrapper */
-}
-
-.form-section::-webkit-scrollbar {
-  display: none;
 }
 
 .form-section h2 {
-  color: #880430;
+  color: white;
   font-size: 2.2rem;
   margin-bottom: 2rem;
   text-align: center;
@@ -173,16 +105,18 @@ body::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  min-height: min-content; /* Permitir que crezca según contenido */
 }
 
 .form-row {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
 
 .form-group {
   flex: 1;
+  min-width: 250px;
   display: flex;
   flex-direction: column;
 }
@@ -192,7 +126,7 @@ body::-webkit-scrollbar {
 }
 
 .form-group label {
-  color: #000000;
+  color: #000;
   font-weight: 500;
   margin-bottom: 0.5rem;
   font-size: 0.95rem;
@@ -200,19 +134,20 @@ body::-webkit-scrollbar {
 }
 
 .form-group input {
+  width: 100%;
   padding: 1rem;
   border: 2px solid #f0f0f0;
   border-radius: 8px;
   font-size: 1rem;
-  transition: all 0.3s ease;
   background-color: #f0f0f0;
-  color: #000000;
+  color: #000;
   font-family: "Be Vietnam", sans-serif;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
 .form-group input::placeholder {
   color: #8d8d8d;
-  font-family: "Be Vietnam", sans-serif;
 }
 
 .form-group input:focus {
@@ -220,7 +155,6 @@ body::-webkit-scrollbar {
   border-color: #66b5cb;
   background-color: white;
   box-shadow: 0 0 0 3px rgba(102, 181, 203, 0.1);
-  color: #000000;
 }
 
 .checkbox-group {
@@ -239,7 +173,7 @@ body::-webkit-scrollbar {
 
 .checkbox-group label {
   font-size: 0.9rem;
-  color: #000000;
+  color: #000;
   line-height: 1.5;
   font-family: "Be Vietnam", sans-serif;
 }
@@ -248,105 +182,75 @@ body::-webkit-scrollbar {
   color: #880430;
   text-decoration: none;
   font-weight: 500;
-  font-family: "Be Vietnam", sans-serif;
 }
 
 .checkbox-group a:hover {
   text-decoration: underline;
 }
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  display: block;
+}
 
-.register-form .register-btn {
-  background: #880430;
+.register-btn {
+  background: transparent;
   color: white;
-  border: none;
-  padding: 1.2rem 2rem;
+  border: 2px solid white;
   border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 1rem;
-  width: 100%;
   font-family: "Be Vietnam", sans-serif;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
-.register-form .register-btn:hover {
+.register-btn:hover {
   background: #660330;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(136, 4, 48, 0.3);
-  color: white;
 }
 
-/* Responsive MANTENIENDO ANCHO COMPLETO */
+/* Responsive */
 @media (max-width: 968px) {
   .register-wrapper {
     flex-direction: column;
     min-height: auto;
-    max-width: 100%; /* MANTIENE ANCHO COMPLETO */
-    max-height: none;
-  }
-
-  .welcome-section {
-    padding: 2rem;
-    min-height: 300px;
-  }
-
-  .welcome-section::before {
-    background-position: center;
-    background-size: 100% auto;
-    opacity: 0.2;
-    width: 150%;
-    height: 120%;
-    top: -10%;
-    left: -25%;
-  }
-
-  .form-section {
-    padding: 2rem;
-    max-height: none;
-    overflow-y: visible;
   }
 
   .form-row {
     flex-direction: column;
-    gap: 0;
+    gap: 1.5rem;
   }
 
-  .register-container {
-    margin-top: 10px;
-    min-height: calc(100vh - 10px);
-    padding: 1rem 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .register-container {
-    padding: 0.5rem 0;
-    margin-top: 70px;
-  }
-
-  .welcome-section h1 {
-    font-size: 2rem;
+  .form-section,
+  .welcome-section {
+    padding: 2rem;
   }
 
   .form-section h2 {
     font-size: 1.8rem;
   }
 
-  .register-wrapper {
-    width: 100%; /* MANTIENE ANCHO COMPLETO */
+  .welcome-section h1 {
+    font-size: 2rem;
   }
+}
 
-  .welcome-section,
-  .form-section {
+@media (max-width: 480px) {
+  .form-section,
+  .welcome-section {
     padding: 1.5rem;
   }
 
-  .welcome-section::before {
-    width: 180%;
-    height: 110%;
-    top: -5%;
-    left: -40%;
-    background-size: 80% auto;
+  .form-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .welcome-section h1 {
+    font-size: 1.8rem;
   }
 }

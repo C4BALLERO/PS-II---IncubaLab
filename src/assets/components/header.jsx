@@ -1,7 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import "../../styles/Header.css";
-import reactLogo from "../react.svg";
+import LogoCorto from "../../../public/logo_corto.png";
 
 /** Devuelve true si hay token o user en storage */
 const hasSession = () => {
@@ -37,7 +37,7 @@ const Header = () => {
     });
     window.dispatchEvent(new Event("auth-changed"));
     setMenuOpen(false);
-    navigate("/login");
+    navigate("/");
   };
 
   const go = (path) => {
@@ -52,7 +52,7 @@ const Header = () => {
       <div className="left-section">
         <div className="logo">
           <Link to="/" onClick={() => setMenuOpen(false)}>
-            <img src={reactLogo} alt="Logo" className="logo-img" />
+            <img src={LogoCorto} alt="Logo" className="logo-img" />
             IncUVa Lab
           </Link>
         </div>
@@ -66,21 +66,21 @@ const Header = () => {
             Inicio
           </NavLink>
           <NavLink
-            to="/explorar"
+            to="/catalogo-proyectos"
             className={linkClass}
             onClick={() => setMenuOpen(false)}
           >
             Catálogo de proyectos
           </NavLink>
           <NavLink
-            to="/faq"
+            to="/preguntas-frecuentes"
             className={linkClass}
             onClick={() => setMenuOpen(false)}
           >
             Preguntas Frecuentes
           </NavLink>
           <NavLink
-            to="/sobre"
+            to="/sobre-nosotros"
             className={linkClass}
             onClick={() => setMenuOpen(false)}
           >
@@ -105,7 +105,7 @@ const Header = () => {
               <>
                 <button
                   className="profile-mobile"
-                  onClick={() => go("/profile")}
+                  onClick={() => go("/mi-perfil")}
                 >
                   Mi perfil
                 </button>
@@ -129,7 +129,7 @@ const Header = () => {
               Iniciar Sesión
             </button>
             <button
-              className="register-btn desktop-btn"
+              className="register-botn desktop-btn"
               onClick={() => go("/register")}
             >
               Registrarse
@@ -138,7 +138,7 @@ const Header = () => {
         ) : (
           <ProfileMenu
             onLogout={handleLogout}
-            onGoProfile={() => go("/profile")}
+            onGoProfile={() => go("/mi-perfil")}
           />
         )}
       </div>
@@ -197,10 +197,29 @@ const ProfileMenu = ({ onLogout, onGoProfile }) => {
         onClick={() => setOpen((v) => !v)}
       >
         <span className="profile-avatar" aria-hidden>
-          {/* Ícono persona (si pones <img> aquí, quita el SVG) */}
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M12 12c2.761 0 5-2.686 5-6s-2.239-6-5-6-5 2.686-5 6 2.239 6 5 6zm0 2c-4.418 0-8 2.239-8 5v3h16v-3c0-2.761-3.582-5-8-5z" />
-          </svg>
+          {(() => {
+            const storedUser =
+              JSON.parse(localStorage.getItem("user")) ||
+              JSON.parse(sessionStorage.getItem("user"));
+
+            return storedUser?.ImagenPerfil ? (
+              <img
+                src={storedUser.ImagenPerfil}
+                alt="Foto de perfil"
+                className="avatar-img"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "50%",
+                  objectFit: "cover"
+                }}
+              />
+            ) : (
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M12 12c2.761 0 5-2.686 5-6s-2.239-6-5-6-5 2.686-5 6 2.239 6 5 6zm0 2c-4.418 0-8 2.239-8 5v3h16v-3c0-2.761-3.582-5-8-5z" />
+              </svg>
+            );
+          })()}
         </span>
       </button>
 

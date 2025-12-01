@@ -33,7 +33,7 @@
 .faq-container{
   position: relative;
   z-index:1;
-  width: 100%;
+  width: 90%;
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 16px;
@@ -47,6 +47,7 @@
   font-weight: 800;
   color: #121212;
   letter-spacing: .2px;
+  font-family: "DM Serif Display", serif;
 }
 .faq-underline{
   width: 140px;
@@ -74,7 +75,7 @@
   border-radius: 16px;
 
   /* el borde real lo “pintaremos” con ::before */
-  border: 6px solid transparent;     /* GROSOR del borde */
+  border: 6px solid transparent;  
   padding: 18px 18px 16px;
 
   box-shadow: 0 1px 0 rgba(0,0,0,.02);
@@ -88,16 +89,16 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 6px; /* GROSOR del borde (igual que el 'border' de arriba) */
+  padding: 6px; 
   background: linear-gradient(135deg,
               var(--brand-primary, #880430),
               var(--brand-secondary, #66b5cb));
 
   /* hacer que el gradiente se vea SOLO como borde */
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); /* WebKit */
-  mask:         linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); /* Estándar */
-  -webkit-mask-composite: xor;   /* Chrome/Safari */
-          mask-composite: exclude; /* Firefox */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask:         linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); 
+  -webkit-mask-composite: xor;   
+          mask-composite: exclude; 
 
   opacity: .6;
   transition: opacity .25s ease, filter .25s ease;
@@ -114,7 +115,7 @@
 .faq-card:hover::before,
 .faq-card:focus-visible::before{
   opacity: 1;
-  animation: faq-border-pan 2.8s linear infinite;
+  animation: faq-border-pan 1.5s linear infinite;
   filter: saturate(1.05);
 }
 

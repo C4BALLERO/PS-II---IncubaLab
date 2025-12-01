@@ -5,9 +5,7 @@ import qrcode from "qrcode";
 
 const router = express.Router();
 
-// ============================================================
-// 🔹 GENERAR EL SECRETO Y EL QR
-// ============================================================
+// GENERAR EL SECRETO Y EL QR
 router.post("/generate", async (req, res) => {
   const { userId } = req.body;
 
@@ -30,10 +28,7 @@ router.post("/generate", async (req, res) => {
     qrImage,
   });
 });
-
-// ============================================================
-// 🔹 VERIFICAR EL CÓDIGO INGRESADO POR EL USUARIO
-// ============================================================
+//VERIFICAR EL CÓDIGO INGRESADO POR EL USUARIO
 router.post("/verify", async (req, res) => {
   const { userId, token } = req.body;
 
@@ -63,10 +58,7 @@ router.post("/verify", async (req, res) => {
     res.status(400).json({ success: false, message: "Código incorrecto" });
   }
 });
-
-// ============================================================
-// 🔹 DESACTIVAR 2FA
-// ============================================================
+//DESACTIVAR 2FA
 router.post("/disable", async (req, res) => {
   const { userId } = req.body;
 
@@ -77,10 +69,7 @@ router.post("/disable", async (req, res) => {
 
   res.json({ success: true, message: "Doble factor desactivado" });
 });
-
-// ============================================================
-// 🔹 CONSULTAR ESTADO DE 2FA
-// ============================================================
+//CONSULTAR ESTADO DE 2FA
 router.get("/status/:userId", async (req, res) => {
   const { userId } = req.params;
 

@@ -24,7 +24,7 @@
 
 /* LADO IZQUIERDO - AZUL */
 .login-left {
-  background-color: #69a7d3; /* azul */
+  background-color: #69a7d3; 
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -63,7 +63,7 @@
 
 /* LADO DERECHO - MORADO/BURDEOS */
 .login-right {
-  background-color: #7a0c3f; /* burdeos */
+  background-color: #7a0c3f; 
   color: white;
   text-align: center;
   padding: 3rem;

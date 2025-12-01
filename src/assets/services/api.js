@@ -1,7 +1,4 @@
 // src/assets/services/api.js
-
-// Detecta automáticamente si tienes VITE_API_URL en el .env
-// y se asegura de quitar el "/" final si lo hubiera.
 const BASE_URL =
   import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "http://localhost:4000/api";
 
@@ -39,35 +36,12 @@ export const getUsers = (params = {}) => {
   const qs = new URLSearchParams(params).toString();
   return request(`/users${qs ? `?${qs}` : ""}`);
 };
-export const getUser = (id) => request(`/users/${id}`);
-export const createUser = (user) =>
-  request(`/users`, { method: "POST", data: user });
-export const updateUser = (id, user) =>
-  request(`/users/${id}`, { method: "PUT", data: user });
-export const softDeleteUser = (id) =>
-  request(`/users/${id}`, { method: "DELETE" });
-export const restoreUser = (id) =>
-  request(`/users/${id}/restore`, { method: "PATCH" });
 
-/* ---------------- PROYECTOS ---------------- */
-export const getProyectos = (params = {}) => {
-  const qs = new URLSearchParams(params).toString();
-  return request(`/proyectos${qs ? `?${qs}` : ""}`);
-};
+export const getUser = (id) => request(`/api/users/${id}`);
+export const createUser = (user) => request(`/api/users`, { method: "POST", data: user });
+export const updateUser = (id, user) => request(`/api/users/${id}`, { method: "PUT", data: user });
+export const softDeleteUser = (id) => request(`/api/users/${id}`, { method: "DELETE" });
+export const restoreUser = (id) => request(`/api/users/${id}/restore`, { method: "PATCH" });
 
-export const getProyecto = (id) => request(`/proyectos/${id}`);
-
-export const crearProyecto = ({ titulo, descripcionBreve, descripcionGeneral }) =>
-  request(`/proyectos`, {
-    method: "POST",
-    data: { titulo, descripcionBreve, descripcionGeneral },
-  });
-
-export const updateProyecto = (id, data) =>
-  request(`/proyectos/${id}`, { method: "PUT", data });
-
-export const deleteProyecto = (id) =>
-  request(`/proyectos/${id}`, { method: "DELETE" });
-
-/* ---------------- PING ---------------- */
+/* -------------------- Healthcheck -------------------- */
 export const ping = () => request(`/`);

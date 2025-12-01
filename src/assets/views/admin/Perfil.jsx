@@ -5,8 +5,6 @@ import { FaUser, FaTrash, FaUsers, FaProjectDiagram, FaCheckCircle } from "react
 
 export default function Perfil() {
   const [openSeguidas, setOpenSeguidas] = useState(true);
-  const [openDonadas, setOpenDonadas] = useState(false);
-  const [openMis, setOpenMis] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -21,9 +19,9 @@ export default function Perfil() {
       <div className="perfil-left">
         <div className="perfil-avatar">
           {user.ImagenPerfil ? (
-            <img src={user.ImagenPerfil} alt="avatar" />
+            <img className="imgAvatar" src={user.ImagenPerfil} alt="avatar" />
           ) : (
-            <FaUser className="user-icon" />
+            <span>👤</span>
           )}
         </div>
         <h2>Mi Perfil</h2>
@@ -31,28 +29,10 @@ export default function Perfil() {
         <p className="username">@{user.NombreUsuario}</p>
 
         <div className="perfil-links">
-          <a href="#">Configurar Cuenta</a>
-          <a href="#">Editar Perfil</a>
-          <a href="#">Ayuda</a>
-        </div>
-
-        <div className="perfil-stats">
-          <div>
-            <span>0</span>
-            <p>CAMPAÑAS</p>
-          </div>
-          <div>
-            <span>1</span>
-            <p>SEGUIDAS</p>
-          </div>
-          <div>
-            <span>0</span>
-            <p>DONADAS</p>
-          </div>
+          <Link to="/configurar-2fa">Configurar Cuenta</Link>
         </div>
 
         <div className="perfil-info">
-          <strong>Información</strong>
           <p><strong>Email:</strong> {user.Correo}</p>
           <p><strong>Número de teléfono:</strong> {user.Telefono || "No registrado"}</p>
           <p><strong>Participa desde:</strong> {new Date(user.FechaCreacion).toLocaleDateString()}</p>
@@ -94,6 +74,16 @@ export default function Perfil() {
                   <FaCheckCircle className="dashboard-icon" />
                   <h2>Aprobar Proyectos</h2>
                   <p>Revisa propuestas y aprueba las que correspondan.</p>
+                </Link>
+                <Link to="/admin/categorias" className="dashboard-card">
+                  <FaProjectDiagram className="dashboard-icon" />
+                  <h2>Gestión de Categorías</h2>
+                  <p>Agrega, edita o elimina categorías de proyectos.</p>
+                </Link>
+                <Link to="/admin/asesorias" className="dashboard-card">
+                  <FaProjectDiagram className="dashboard-icon" />
+                  <h2>Gestión de Asesorías</h2>
+                  <p>Agrega, edita o elimina categorías de proyectos.</p>
                 </Link>
               </div>
             </div>

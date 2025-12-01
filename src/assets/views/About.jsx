@@ -10,7 +10,7 @@ const STEPS = [
     img: "https://images.unsplash.com/photo-1604594849809-dfedbc827105?q=80&w=1200&auto=format&fit=crop",
     body: (
       <>
-        <p>El crowdfunding es financiamiento colaborativo. En IncuVa Lab potenciamos proyectos con networking y mentorías.</p>
+        <p>En IncuVa Lab potenciamos proyectos con networking y mentorías.</p>
         <ul className="ab-list">
           <li>Define objetivos y audiencia.</li>
           <li>Elige el tipo de campaña correcto.</li>
@@ -74,11 +74,6 @@ export default function About() {
 
   return (
     <div className="ab-wrapper">
-      <header className="ab-hero">
-        <h1>Sobre IncuVa Lab</h1>
-        <p>Recaudar fondos solo lleva unos minutos</p>
-      </header>
-
       <section className="ab-steps">
         {STEPS.map((s) => (
           <button key={s.id} className="ab-step" onClick={() => setOpen(s.id)}>
@@ -89,8 +84,17 @@ export default function About() {
             </div>
           </button>
         ))}
-      </section>
-
+        </section>
+        <div className="ab-hero">
+          <h1>Sobre IncuVa Lab</h1>
+          <p>Nuestro sistema no usa dinero como el crowdfunding tradicional.
+            <br />
+            Aquí los proyectos reciben apoyo a través de mentorías,
+            <br />
+            seguimiento, contactos y colaboración de profesionales 
+            <br />
+            que se identifican con su visión.</p>
+        </div>
       {STEPS.map((s) => (
         <Modal key={s.id} open={open === s.id} title={s.title} onClose={() => setOpen(null)}>
           <div className="ab-modal__grid">

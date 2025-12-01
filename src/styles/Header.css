@@ -8,9 +8,7 @@
   --profile-avatar-hover: #66b5cb; /* color del círculo al hover */
 }
 
-/* =========================
-   Header base
-   ========================= */
+/*header*/
 .header {
   background-color: #fffdfd;
   color: #000;
@@ -41,8 +39,8 @@
   margin-right: 2rem;
 }
 .logo-img {
-  height: 40px;
-  width: 40px;
+  height: 60px;
+  width: 60px;
   margin-right: 0.5rem;
 }
 .logo a {
@@ -80,9 +78,7 @@
   display: inline-flex;
 }
 
-/* =========================
-   Botones auth (desktop)
-   ========================= */
+/* Botones auth (desktop)*/
 .login-btn {
   background-color: #bebebe;
   color: #111;
@@ -98,7 +94,7 @@
   color: #fff;
 }
 
-.register-btn {
+.register-botn {
   background-color: #880430;
   color: #fff;
   border: none;
@@ -108,14 +104,12 @@
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
 }
-.register-btn:hover {
+.register-botn:hover {
   background-color: #66b5cb;
   color: #fff;
 }
 
-/* =========================
-   Botón menú (hamburguesa)
-   ========================= */
+/* Botón menú (hamburguesa)*/
 .menu-toggle {
   display: none;
   background: none;
@@ -137,9 +131,7 @@
   margin-top: 1rem;
 }
 
-/* =========================
-   Accesibilidad (focus)
-   ========================= */
+/*Accesibilidad (focus)*/
 .nav a:focus-visible,
 .login-btn:focus-visible,
 .register-btn:focus-visible,
@@ -150,9 +142,7 @@
   border-radius: 4px;
 }
 
-/* =========================
-   Menú de perfil (desktop)
-   ========================= */
+/*Menú de perfil (desktop)*/
 .profile-menu {
   position: relative;
   display: inline-flex;
@@ -215,9 +205,7 @@
   outline-offset: 2px;
 }
 
-/* =========================
-   Dropdown de perfil (desktop)
-   ========================= */
+/*Dropdown de perfil (desktop)*/
 .profile-dropdown {
   position: absolute;
   right: 0;
@@ -288,9 +276,7 @@
   border: 0;
 }
 
-/* =========================
-   Responsive (móvil)
-   ========================= */
+/*Responsive (móvil)*/
 @media (max-width: 1020px) {
   .nav {
     position: absolute;
@@ -329,7 +315,7 @@
     margin-top: 1rem;
   }
 
-  /* ✅ “Mi perfil” en GRIS (como Iniciar Sesión) */
+  /*“Mi perfil” en GRIS (como Iniciar Sesión) */
   .nav-buttons .profile-mobile {
     appearance: none;
     background: #bebebe; /* gris */
@@ -344,7 +330,7 @@
     -webkit-tap-highlight-color: transparent;
   }
   .nav-buttons .profile-mobile:hover {
-    background-color: #66b5cb; /* hover igual al resto */
+    background-color: #66b5cb; 
     color: #fff;
     border-color: transparent;
   }
@@ -361,10 +347,10 @@
     outline-offset: 2px;
   }
 
-  /* ✅ “Cerrar sesión” se queda en GUINDO */
+  /* “Cerrar sesión” se queda en GUINDO */
   .nav-buttons .logout-btn {
     appearance: none;
-    background: #880430; /* guindo */
+    background: #880430;
     color: #fff;
     border: 1px solid rgba(0, 0, 0, 0.08);
     padding: 0.8rem 0.9rem;
@@ -376,7 +362,7 @@
     -webkit-tap-highlight-color: transparent;
   }
   .nav-buttons .logout-btn:hover {
-    background-color: #66b5cb; /* mismo hover que el resto */
+    background-color: #66b5cb; 
     color: #111;
     border-color: transparent;
   }
@@ -399,9 +385,7 @@
   }
 }
 
-/* =========================
-   Responsive (desktop)
-   ========================= */
+/*Responsive (desktop)*/
 @media (min-width: 1021px) {
   .nav-buttons {
     display: none !important;

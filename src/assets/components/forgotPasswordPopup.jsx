@@ -5,7 +5,7 @@ const ForgotPasswordPopup = ({ isOpen, onClose }) => {
   const [token, setToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [step, setStep] = useState(1); // 1=correo, 2=token, 3=nueva contraseña, 4=éxito
+  const [step, setStep] = useState(1);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -16,7 +16,7 @@ const ForgotPasswordPopup = ({ isOpen, onClose }) => {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:4000/api/usuarios/send-token", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/send-token`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -42,7 +42,7 @@ const ForgotPasswordPopup = ({ isOpen, onClose }) => {
 
     try {
       const res = await fetch(
-        "http://localhost:4000/api/usuarios/validate-token",
+        `${import.meta.env.VITE_API_URL}/api/usuarios/validate-token`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -53,7 +53,7 @@ const ForgotPasswordPopup = ({ isOpen, onClose }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Token inválido");
 
-      setMessage("✅ Token válido. Ingresa tu nueva contraseña");
+      setMessage("Token válido. Ingresa tu nueva contraseña");
       setStep(3); // mostrar input de nueva contraseña
     } catch (err) {
       setMessage("❌ " + err.message);
@@ -77,7 +77,7 @@ const ForgotPasswordPopup = ({ isOpen, onClose }) => {
 
     try {
       const res = await fetch(
-        "http://localhost:4000/api/usuarios/reset-password",
+        `${import.meta.env.VITE_API_URL}/api/usuarios/reset-password`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -89,7 +89,7 @@ const ForgotPasswordPopup = ({ isOpen, onClose }) => {
       if (!res.ok)
         throw new Error(data.error || "Error actualizando contraseña");
 
-      setMessage("✅ Contraseña actualizada exitosamente");
+      setMessage("Contraseña actualizada exitosamente");
       setStep(4); // paso final de éxito
     } catch (err) {
       setMessage("❌ " + err.message);

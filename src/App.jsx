@@ -5,19 +5,15 @@ import PrivateRoute from "./assets/components/PrivateRoute";
 
 // Vistas públicas
 import Home from "./assets/views/Home";
-import Prueba from "./assets/views/prueba";
 import Faq from "./assets/views/Faq";
 import About from "./assets/views/About";
 import Login from "./assets/views/login";
 import Register from "./assets/views/register";
 import ExplorarProyectos from "./assets/views/ExplorarProyectos";
 import CrearProyecto from "./assets/views/CrearProyecto";
-import CrearCampania from "./assets/views/CrearCampania";
-import CrearCampania2 from "./assets/views/CrearCampania2";
 
 // Vistas administración
 import UsersAdmin from "./assets/views/UsersAdmin";
-import CrudUsuarios from "./assets/views/admin/CrudUsuarios";
 import CrudProyectos from "./assets/views/admin/CrudProyectos";
 import AceptarProyectos from "./assets/views/admin/AceptarProyectos";
 import ProyectosRemovidos from "./assets/views/admin/ProyectosRemovidos";
@@ -25,19 +21,39 @@ import Perfil from "./assets/views/admin/Perfil";
 import Configurar2FA from "./assets/views/Configurar2FA";
 import Profile from "./assets/views/Profile";
 import EditarProyecto from "./assets/views/admin/EditarProyecto";
+import VerProyecto from "./assets/views/VerProyecto.jsx";
+
+// Vistas CRUD Categorías
+import CategoriasAdmin from "./assets/views/admin/CategoriasAdmin";
+import CrearCategoria from "./assets/views/admin/CrearCategoria";
+import EditarCategoria from "./assets/views/admin/EditarCategoria";
+
+import AsesoriasAdmin from "./assets/views/admin/AsesoriasAdmin";
+import CrearAsesoria from "./assets/views/admin/CrearAsesoria";
+import EditarAsesoria from "./assets/views/admin/EditarAsesoria";
+import EditarProyectoUsuario from "./assets/views/EditarProyectoUsuario";
+
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Cargar usuario desde localStorage
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) setUser(storedUser);
     setLoading(false);
   }, []);
 
-  if (loading) return <p>Cargando...</p>; // Spinner o mensaje mientras carga
+  useEffect(() => {
+    const handleAuthChange = () => {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      setUser(storedUser);
+    };
+    window.addEventListener("auth-changed", handleAuthChange);
+    return () => window.removeEventListener("auth-changed", handleAuthChange);
+  }, []);
+
+  if (loading) return <p>Cargando...</p>;
 
   return (
     <Router>
@@ -45,48 +61,52 @@ function App() {
         {/* ----------------- Rutas públicas dentro de MainLayout ----------------- */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/prueba" element={<Prueba />} />
-          <Route path="/faq" element={<Faq />} />
-          <Route path="/sobre" element={<About />} />
-          <Route path="/explorar" element={<ExplorarProyectos />} />
-          <Route path="/crear-proyecto" element={<CrearProyecto />} />
-          <Route path="/crear-campania" element={<CrearCampania />} />
-          <Route path="/crear-campania-2" element={<CrearCampania2 />} />
-
-          {/* Login/Register redirigen si ya hay usuario */}
+          <Route path="/preguntas-frecuentes" element={<Faq />} />
+          <Route path="/sobre-nosotros" element={<About />} />
+          <Route path="/catalogo-proyectos" element={<ExplorarProyectos />} />
+          <Route path="/proyecto/:id" element={<VerProyecto />} />
           <Route
-            path="/login"
-            element={!user ? <Login setUser={setUser} /> : <Navigate to="/" />}
+            path="/mi-perfil"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
           />
+          {/* Rutas de admin usando PrivateRoute con role={1} */}
           <Route
-            path="/register"
-            element={!user ? <Register setUser={setUser} /> : <Navigate to="/" />}
+            path="/admin/editar/:id"
+            element={
+              <PrivateRoute role={1}>
+                <EditarProyecto />
+              </PrivateRoute>
+            }
           />
         </Route>
-
-        {/* ----------------- Rutas protegidas ----------------- */}
         <Route
-          path="/profile"
+          path="/usuario/editar-proyecto/:id"
           element={
-            <PrivateRoute user={user}>
-              <Profile />
+            <PrivateRoute>
+              <EditarProyectoUsuario />
             </PrivateRoute>
           }
         />
+        <Route path="/Crear-Campania" element={<CrearProyecto />} />
+        
+
+        {/* Rutas de administración */}
         <Route
-          path="/configurar-2fa"
+          path="/admin/perfil"
           element={
-            <PrivateRoute user={user}>
-              <Configurar2FA userId={user?.IdUser} />
+            <PrivateRoute role={1}>
+              <Perfil />
             </PrivateRoute>
           }
         />
-
-        {/* ----------------- Rutas admin (role = 1) ----------------- */}
         <Route
           path="/admin/users"
           element={
-            <PrivateRoute user={user} role={1}>
+            <PrivateRoute role={1}>
               <UsersAdmin />
             </PrivateRoute>
           }
@@ -94,7 +114,7 @@ function App() {
         <Route
           path="/admin/proyectos"
           element={
-            <PrivateRoute user={user} role={1}>
+            <PrivateRoute role={1}>
               <CrudProyectos />
             </PrivateRoute>
           }
@@ -102,7 +122,7 @@ function App() {
         <Route
           path="/admin/aprobar-proyectos"
           element={
-            <PrivateRoute user={user} role={1}>
+            <PrivateRoute role={1}>
               <AceptarProyectos />
             </PrivateRoute>
           }
@@ -110,25 +130,94 @@ function App() {
         <Route
           path="/admin/proyectos-removidos"
           element={
-            <PrivateRoute user={user} role={1}>
+            <PrivateRoute role={1}>
               <ProyectosRemovidos />
             </PrivateRoute>
           }
         />
+
+        {/* Rutas CRUD Categorías */}
         <Route
-          path="/admin/perfil"
+          path="/admin/categorias"
           element={
-            <PrivateRoute user={user} role={1}>
-              <Perfil />
+            <PrivateRoute role={1}>
+              <CategoriasAdmin />
             </PrivateRoute>
           }
         />
         <Route
-          path="/admin/editar/:id"
+          path="/admin/categorias/crear"
           element={
-            <PrivateRoute user={user} role={1}>
-              <EditarProyecto />
+            <PrivateRoute role={1}>
+              <CrearCategoria />
             </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/categorias/editar/:id"
+          element={
+            <PrivateRoute role={1}>
+              <EditarCategoria />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/asesorias"
+          element={
+            <PrivateRoute role={1}>
+              <AsesoriasAdmin />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/asesorias/crear"
+          element={
+            <PrivateRoute role={1}>
+              <CrearAsesoria />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/asesorias/editar/:id"
+          element={
+            <PrivateRoute role={1}>
+              <EditarAsesoria />
+            </PrivateRoute>
+          }
+        />
+        {/* Rutas protegidas para cualquier usuario */}
+        <Route
+          path="/configurar-2fa"
+          element={
+            <PrivateRoute>
+              <Configurar2FA userId={user?.IdUser} />
+            </PrivateRoute>
+          }
+        />
+
+        {/* ----------------- Rutas admin (role = 1) ----------------- */}
+        <Route
+          path="/login"
+          element={
+            !user ? (
+              <Login setUser={setUser} />
+            ) : user.Id_Rol === 1 ? (
+              <Navigate to="/admin/perfil" />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            !user ? (
+              <Register setUser={setUser} />
+            ) : user.Id_Rol === 1 ? (
+              <Navigate to="/admin/perfil" />
+            ) : (
+              <Navigate to="/profile" />
+            )
           }
         />
       </Routes>

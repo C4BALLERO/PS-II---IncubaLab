@@ -9,4 +9,14 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  server: {
+    host: true,          // Escucha en todas las interfaces (importante para Docker)
+    watch: {
+      usePolling: true,  // Detecta cambios en volúmenes montados
+    },
+    hmr: {
+      host: 'localhost', // IP o host de tu máquina
+      port: 5173,        // Puerto que expusiste en docker-compose
+    },
+  },
 });

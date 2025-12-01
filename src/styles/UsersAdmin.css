@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 :root{
   --bg:#0f1116;
   --card:#ffffff;
@@ -16,6 +17,32 @@
 .ua-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
 .ua-header h1{font-size:1.6rem;font-weight:800;color:#fff;margin:0}
 .ua-sub{color:var(--muted);margin:.25rem 0 0}
+=======
+:root {
+  --bg: #0f1116;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --text: #111827;
+  --primary: #880430;     
+  --primary-600: #a0063c;
+  --danger: #b00020;
+  --success: #066a41;
+  --ring: rgba(136, 4, 48, .15);
+  --shadow: 0 8px 24px rgba(0, 0, 0, .15);
+  --radius: 16px;
+}
+
+/* Contenedor principal */
+.users-admin {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px 24px 60px;
+  color: #e5e7eb;
+  background: linear-gradient(135deg, #8a1538, #1a1d24);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .5);
+}
+>>>>>>> Stashed changes
 
 .ua-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .ua-controls input[type="search"]{padding:.6rem .85rem;min-width:260px;border-radius:12px;border:1px solid #2a3140;background:#0b0d12;color:#d1d5db;outline:none;transition:box-shadow .15s,border-color .15s}
