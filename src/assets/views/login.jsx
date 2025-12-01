@@ -25,22 +25,37 @@ const Login = ({ setUser }) => {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "❌ Credenciales incorrectas");
+        // Manejo de errores por código HTTP
+        if (res.status === 403) {
+          alert("❌ Tu cuenta está desactivada o eliminada.");
+        } else if (res.status === 401) {
+          alert("❌ Usuario o contraseña incorrectos.");
+        } else {
+          alert(data.error || "❌ Ocurrió un error en el inicio de sesión.");
+        }
+        return;
+      }
+
+      const user = data.user;
+
+      // Verificar si el usuario está inactivo
+      if (user.Estado === 0) {
+        alert("❌ Esta cuenta ha sido desactivada. Contacta al administrador.");
         return;
       }
 
       // Si el usuario tiene 2FA activo, pedimos el código
-      if (data.user && data.user.DobleFactorActivo === true) {
-        setTempUser(data.user);
+      if (user.DobleFactorActivo) {
+        setTempUser(user);
         setIs2FAOpen(true);
       } else {
-        // Si no tiene 2FA, inicia sesión directo
-        localStorage.setItem("user", JSON.stringify(data.user));
+        // Inicia sesión directamente
+        localStorage.setItem("user", JSON.stringify(user));
         window.dispatchEvent(new Event("auth-changed"));
-        setUser(data.user);
+        setUser(user);
 
         // 🔹 Redirigir según rol
-        if (data.user.Id_Rol === 1) navigate("/admin/perfil"); // admin
+        if (user.Id_Rol === 1) navigate("/admin/perfil"); // admin
         else navigate("/profile"); // usuario normal
       }
     } catch (error) {
@@ -51,7 +66,7 @@ const Login = ({ setUser }) => {
 
   const handleVerify2FA = async () => {
     if (!code || code.length !== 6) {
-      alert(" Ingrese el código completo de 6 dígitos.");
+      alert("Ingrese el código completo de 6 dígitos.");
       return;
     }
 
@@ -135,9 +150,7 @@ const Login = ({ setUser }) => {
             Regístrate
           </Link>
           <br />
-          <Link to="/">
-          Volver a la pagina principal
-          </Link>
+          <Link to="/">Volver a la pagina principal</Link>
         </div>
       </div>
 
@@ -209,7 +222,7 @@ const inputStyle = {
 };
 
 const verifyBtn = {
-  background: "#528cb0 ",
+  background: "#528cb0",
   color: "white",
   border: "none",
   padding: "8px 16px",

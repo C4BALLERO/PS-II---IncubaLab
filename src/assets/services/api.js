@@ -1,12 +1,14 @@
 // src/assets/services/api.js
 const BASE_URL =
-  import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "http://localhost:4000/api";
+  import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "http://localhost:4000";
 
+/* ---------------- FUNCION REQUEST GENERAL ---------------- */
 async function request(path, { method = "GET", data, headers } = {}) {
   const opts = {
     method,
     headers: { "Content-Type": "application/json", ...(headers || {}) },
   };
+
   if (data !== undefined) opts.body = JSON.stringify(data);
 
   try {
@@ -23,25 +25,33 @@ async function request(path, { method = "GET", data, headers } = {}) {
       return { success: false, message: msg };
     }
 
-    // Normaliza siempre la respuesta
-    return { success: true, ...payload };
+    // ✅ Si el payload es un array, devuélvelo directamente
+    return Array.isArray(payload?.data) ? payload.data : { success: true, ...payload };
   } catch (err) {
     console.error("❌ Error al conectar API:", err);
     return { success: false, message: "No se pudo conectar al servidor" };
   }
 }
 
-/* ---------------- USERS ---------------- */
+/* ---------------- USERS API ---------------- */
 export const getUsers = (params = {}) => {
   const qs = new URLSearchParams(params).toString();
-  return request(`/users${qs ? `?${qs}` : ""}`);
+  return request(`/api/users${qs ? `?${qs}` : ""}`);
 };
 
 export const getUser = (id) => request(`/api/users/${id}`);
-export const createUser = (user) => request(`/api/users`, { method: "POST", data: user });
-export const updateUser = (id, user) => request(`/api/users/${id}`, { method: "PUT", data: user });
-export const softDeleteUser = (id) => request(`/api/users/${id}`, { method: "DELETE" });
-export const restoreUser = (id) => request(`/api/users/${id}/restore`, { method: "PATCH" });
 
-/* -------------------- Healthcheck -------------------- */
+export const createUser = (user) =>
+  request(`/api/users`, { method: "POST", data: user });
+
+export const updateUser = (id, user) =>
+  request(`/api/users/${id}`, { method: "PUT", data: user });
+
+export const softDeleteUser = (id) =>
+  request(`/api/users/${id}`, { method: "DELETE" });
+
+export const restoreUser = (id) =>
+  request(`/api/users/${id}/restore`, { method: "PATCH" });
+
+/* ---------------- HEALTHCHECK ---------------- */
 export const ping = () => request(`/`);

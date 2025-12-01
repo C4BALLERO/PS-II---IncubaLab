@@ -82,7 +82,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Error procesando el registro", details: error.message });
   }
 });
-// Login
+// login actualizado en backend
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   Usuario.getByEmail(email, async (err, results) => {
@@ -91,7 +91,10 @@ router.post("/login", async (req, res) => {
 
     const user = results[0];
 
-    // Comparar contraseña con hash
+    if (user.Estado === 0) {
+      return res.status(401).json({ error: "Cuenta desactivada" });
+    }
+
     const match = await bcrypt.compare(password, user.Contrasenia);
     if (!match) return res.status(401).json({ error: "Contraseña incorrecta" });
 
@@ -99,7 +102,6 @@ router.post("/login", async (req, res) => {
     res.json({ message: "Login exitoso", user });
   });
 });
-
 // Verificación 2FA
 router.post("/verify-2fa", (req, res) => {
   const { userId, token } = req.body;

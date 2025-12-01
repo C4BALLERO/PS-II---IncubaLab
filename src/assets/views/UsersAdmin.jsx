@@ -1,6 +1,5 @@
 // src/assets/views/UsersAdmin.jsx
 import "@/styles/UsersAdmin.css";
-
 import { useEffect, useMemo, useState } from "react";
 import {
   getUsers,
@@ -11,14 +10,18 @@ import {
   restoreUser,
 } from "@/assets/services/api";
 import { Link } from "react-router-dom";
+
 const emptyForm = {
   NombreUsuario: "",
   Nombre: "",
-  Apellido: "",
+  PrimerApellido: "",
+  SegundoApellido: "",
   Correo: "",
   ImagenPerfil: "",
-  Id_Rol: 2,     
-  Contrasenia: "", 
+  Telefono: "",
+  Id_Rol: 2,
+  Contrasenia: "",
+  Estado: true,
 };
 
 export default function UsersAdmin() {
@@ -47,7 +50,6 @@ export default function UsersAdmin() {
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showDeleted]);
 
   const filtered = useMemo(() => {
@@ -57,7 +59,8 @@ export default function UsersAdmin() {
       (u) =>
         u.NombreUsuario?.toLowerCase().includes(term) ||
         u.Nombre?.toLowerCase().includes(term) ||
-        u.Apellido?.toLowerCase().includes(term) ||
+        u.PrimerApellido?.toLowerCase().includes(term) ||
+        u.SegundoApellido?.toLowerCase().includes(term) ||
         u.Correo?.toLowerCase().includes(term)
     );
   }, [list, q]);
@@ -76,11 +79,14 @@ export default function UsersAdmin() {
       setForm({
         NombreUsuario: u.NombreUsuario ?? "",
         Nombre: u.Nombre ?? "",
-        Apellido: u.Apellido ?? "",
+        PrimerApellido: u.PrimerApellido ?? "",
+        SegundoApellido: u.SegundoApellido ?? "",
         Correo: u.Correo ?? "",
         ImagenPerfil: u.ImagenPerfil ?? "",
-        Id_Rol: u.Id_Rol ?? 3,
-        Contrasenia: "", // al editar, contraseña opcional (vacía = no cambiar)
+        Telefono: u.Telefono ?? "",
+        Id_Rol: u.Id_Rol ?? 2,
+        Contrasenia: "",
+        Estado: u.Estado ?? true,
       });
       setShowPwd(false);
     } catch (e) {
@@ -98,15 +104,13 @@ export default function UsersAdmin() {
     try {
       const payload = {
         ...form,
-        Id_Rol: Number(form.Id_Rol) || 3,
+        Id_Rol: Number(form.Id_Rol) || 2,
       };
 
       if (editingId) {
-        // si no se escribió nueva contraseña, no la envíes
         if (!payload.Contrasenia) delete payload.Contrasenia;
         await updateUser(editingId, payload);
       } else {
-        // creando: la contraseña es obligatoria (BD: NOT NULL)
         if (!payload.Contrasenia || payload.Contrasenia.length < 6) {
           throw new Error("La contraseña es obligatoria (mínimo 6 caracteres).");
         }
@@ -185,7 +189,6 @@ export default function UsersAdmin() {
               >
                 <div className="ua-card-body">
                   <div className="ua-avatar">
-                    {/* Solo mostrar la imagen que el usuario suba */}
                     {u.ImagenPerfil ? (
                       <img src={u.ImagenPerfil} alt={u.NombreUsuario} />
                     ) : (
@@ -194,15 +197,16 @@ export default function UsersAdmin() {
                   </div>
                   <div className="ua-info">
                     <h3>
-                      {u.Nombre} {u.Apellido}{" "}
+                      {u.Nombre} {u.PrimerApellido} {u.SegundoApellido || ""}
                       <span className="ua-muted">(@{u.NombreUsuario})</span>
                     </h3>
                     <p className="ua-muted">{u.Correo}</p>
                     <p className="ua-meta">
-                      Rol: {u.Id_Rol === 1 ? "Admin" : u.Id_Rol === 2 ? "Creador" : "Contribuyente"}
-                      {u.Eliminado ? (
-                        <span className="ua-badge danger">eliminado</span>
-                      ) : null}
+                      Tel: {u.Telefono || "N/A"}
+                    </p>
+                    <p className="ua-meta">
+                      Rol: {Number(u.Id_Rol) === 1 ? "Admin" : "Usuario"}{" "}
+                      {u.Eliminado ? <span className="ua-badge danger">eliminado</span> : null}
                     </p>
                   </div>
                 </div>
@@ -232,7 +236,7 @@ export default function UsersAdmin() {
               <input
                 value={form.NombreUsuario}
                 onChange={(e) => setForm({ ...form, NombreUsuario: e.target.value })}
-                required
+                {...(!editingId ? { required: true } : {})}
               />
             </label>
 
@@ -241,16 +245,24 @@ export default function UsersAdmin() {
               <input
                 value={form.Nombre}
                 onChange={(e) => setForm({ ...form, Nombre: e.target.value })}
-                required
+                {...(!editingId ? { required: true } : {})}
               />
             </label>
 
             <label>
-              Apellido
+              Primer Apellido
               <input
-                value={form.Apellido}
-                onChange={(e) => setForm({ ...form, Apellido: e.target.value })}
-                required
+                value={form.PrimerApellido}
+                onChange={(e) => setForm({ ...form, PrimerApellido: e.target.value })}
+                {...(!editingId ? { required: true } : {})}
+              />
+            </label>
+
+            <label>
+              Segundo Apellido
+              <input
+                value={form.SegundoApellido}
+                onChange={(e) => setForm({ ...form, SegundoApellido: e.target.value })}
               />
             </label>
 
@@ -260,29 +272,27 @@ export default function UsersAdmin() {
                 type="email"
                 value={form.Correo}
                 onChange={(e) => setForm({ ...form, Correo: e.target.value })}
-                required
+                {...(!editingId ? { required: true } : {})}
               />
             </label>
 
             <label className="ua-col-2">
-              Imagen (URL)
+              Teléfono
               <input
-                value={form.ImagenPerfil}
-                onChange={(e) => setForm({ ...form, ImagenPerfil: e.target.value })}
-                placeholder="https://i.pravatar.cc/150?img=3"
+                value={form.Telefono}
+                onChange={(e) => setForm({ ...form, Telefono: e.target.value })}
               />
             </label>
 
-            {/* Contraseña: obligatoria al crear, opcional al editar */}
             <label className="ua-col-2">
-              Contraseña {editingId ? <span className="ua-muted">(opcional)</span> : null}
+              Contraseña {editingId && <span className="ua-muted">(opcional)</span>}
               <div style={{ display: "flex", gap: 8 }}>
                 <input
                   type={showPwd ? "text" : "password"}
                   value={form.Contrasenia}
                   onChange={(e) => setForm({ ...form, Contrasenia: e.target.value })}
                   placeholder={editingId ? "Dejar vacío para no cambiar" : "Mínimo 6 caracteres"}
-                  {...(editingId ? {} : { required: true, minLength: 6 })}
+                  {...(!editingId ? { required: true, minLength: 6 } : {})}
                 />
                 <button
                   type="button"
@@ -301,8 +311,18 @@ export default function UsersAdmin() {
                 onChange={(e) => setForm({ ...form, Id_Rol: Number(e.target.value) })}
               >
                 <option value={1}>Admin</option>
-                <option value={2}>Creador</option>
-                <option value={3}>Contribuyente</option>
+                <option value={2}>Usuario</option>
+              </select>
+            </label>
+
+            <label>
+              Estado
+              <select
+                value={form.Estado ? 1 : 0}
+                onChange={(e) => setForm({ ...form, Estado: e.target.value === "1" })}
+              >
+                <option value={1}>Activo</option>
+                <option value={0}>Inactivo</option>
               </select>
             </label>
 
