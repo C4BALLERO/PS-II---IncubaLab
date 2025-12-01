@@ -217,9 +217,6 @@ export default function VerProyecto() {
       <div className="creador">
         <h3>Encargado</h3>
         <div className="creador-info">
-          {proyecto.ImagenCreador && (
-            <img src={`${import.meta.env.VITE_API_URL}${proyecto.ImagenCreador}`} alt="Creador" />
-          )}
           <span>{proyecto.ResponsableNombre}</span>
         </div>
       </div>

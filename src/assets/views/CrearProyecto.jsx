@@ -380,7 +380,7 @@ function CrearProyecto() {
 
         <fieldset id="field-RedesSociales">
           <legend>Redes Sociales (opcional, máximo 5)</legend>
-          {["Facebook", "Instagram", "YouTube", "Twitter(X)", "TikTok"].map(r => (
+          {["Facebook", "Instagram", "YouTube", "Twitter", "TikTok"].map(r => (
             <label key={r} id={`field-${r}`}>
               {r}:
               <input type="url" name={r} value={formData.RedesSociales[r]} onChange={handleChange} />
