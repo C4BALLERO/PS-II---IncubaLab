@@ -264,4 +264,7 @@
   .ua-form-grid {
     grid-template-columns: 1fr; /* formulario de 1 columna */
   }
+  .ua-header h1 {
+    font-size: 2em;
+  }
 }

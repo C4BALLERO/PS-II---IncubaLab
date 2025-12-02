@@ -35,7 +35,7 @@ export default function UsersAdmin() {
   const [error, setError] = useState("");
   const [showPwd, setShowPwd] = useState(false);
 
-  // 🟢 ref para scroll al formulario
+  //  ref para scroll al formulario
   const formRef = useRef(null);
 
   const load = async () => {
@@ -78,7 +78,7 @@ export default function UsersAdmin() {
     setEditingId(null);
     setForm(emptyForm);
     setShowPwd(false);
-    scrollToForm(); // 🟢 scroll al formulario al crear
+    scrollToForm(); //  scroll al formulario al crear
   };
 
   const startEdit = async (id) => {
@@ -99,7 +99,7 @@ export default function UsersAdmin() {
         Estado: u.Estado ?? true,
       });
       setShowPwd(false);
-      scrollToForm(); // 🟢 scroll al formulario al editar
+      scrollToForm(); //  scroll al formulario al editar
     } catch (e) {
       alert(e.message || "No se pudo cargar el usuario");
     } finally {
@@ -239,7 +239,7 @@ export default function UsersAdmin() {
           )}
         </div>
 
-        {/* 🟢 agregamos ref al contenedor del formulario */}
+        {/*  agregamos ref al contenedor del formulario */}
         <div className="ua-form" ref={formRef}>
           <h2>{editingId ? "Editar usuario" : "Nuevo usuario"}</h2>
           <form onSubmit={onSubmit} className="ua-form-grid">
