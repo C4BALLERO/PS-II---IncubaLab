@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../../styles/AdminPerfil.css";
 import { FaUser, FaTrash, FaUsers, FaProjectDiagram, FaCheckCircle } from "react-icons/fa";
 
 export default function Perfil() {
   const [openSeguidas, setOpenSeguidas] = useState(true);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -13,6 +14,14 @@ export default function Perfil() {
   }, []);
 
   if (!user) return <p>Cargando perfil...</p>;
+
+  const handleLogout = () => {
+    ["authToken", "adminToken", "user", "token", "userToken"].forEach((k) => {
+      localStorage.removeItem(k);
+      sessionStorage.removeItem(k);
+    });
+    navigate("/");
+  };
 
   return (
     <div className="perfil-container">
@@ -36,6 +45,11 @@ export default function Perfil() {
           <p><strong>Email:</strong> {user.Correo}</p>
           <p><strong>Número de teléfono:</strong> {user.Telefono || "No registrado"}</p>
           <p><strong>Participa desde:</strong> {new Date(user.FechaCreacion).toLocaleDateString()}</p>
+
+          {/* BOTÓN DE CERRAR SESIÓN */}
+          <button className="logout-btn-perfil" onClick={handleLogout} style={{ marginTop: "10px" }}>
+            Cerrar sesión
+          </button>
         </div>
       </div>
 
@@ -75,11 +89,13 @@ export default function Perfil() {
                   <h2>Aprobar Proyectos</h2>
                   <p>Revisa propuestas y aprueba las que correspondan.</p>
                 </Link>
+
                 <Link to="/admin/categorias" className="dashboard-card">
                   <FaProjectDiagram className="dashboard-icon" />
                   <h2>Gestión de Categorías</h2>
                   <p>Agrega, edita o elimina categorías de proyectos.</p>
                 </Link>
+
                 <Link to="/admin/asesorias" className="dashboard-card">
                   <FaProjectDiagram className="dashboard-icon" />
                   <h2>Gestión de Asesorías</h2>

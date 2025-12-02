@@ -8,21 +8,18 @@ const Footer = () => {
         <div className="footer-section">
           <h4>Nuestra Sección</h4>
           <Link to="/sobre-nosotros">Sobre Nosotros</Link>
-          <a href="#">Nuestros Servicios</a>
-          <a href="#">Política de Privacidad</a>
-          <a href="#">Programas Afiliados</a>
+          <a href="https://www.univalle.edu/?page_id=4115" target="_blank" rel="noopener noreferrer">Orgullo Univalle</a>
         </div>
 
         <div className="footer-section">
           <h4>Te Ayudamos</h4>
-          <a href="#">Preguntas y Respuestas</a>
+          <Link to="/preguntas-frecuentes">Preguntas</Link>
         </div>
-
         <div className="footer-section">
           <h4>Visita Tambien</h4>
-          <a href="https://www.univalle.edu/">Univalle Oficial</a>
-          <a href="https://www.univalle.edu/?page_id=150">Eres un Estudiante Nuevo</a>
-          <a href="https://www.univalle.edu/?page_id=440">Más sobre Univalle</a>
+          <a href="https://www.univalle.edu/" target="_blank" rel="noopener noreferrer">Univalle Oficial</a>
+          <a href="https://www.univalle.edu/?page_id=150" target="_blank" rel="noopener noreferrer">Eres un Estudiante Nuevo</a>
+          <a href="https://www.univalle.edu/?page_id=440" target="_blank" rel="noopener noreferrer">Más sobre Univalle</a>
         </div>
 
         <div className="footer-section socials-section">

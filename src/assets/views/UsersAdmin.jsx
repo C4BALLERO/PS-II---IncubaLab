@@ -1,6 +1,6 @@
 // src/assets/views/UsersAdmin.jsx
 import "@/styles/UsersAdmin.css";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import {
   getUsers,
   getUser,
@@ -35,6 +35,9 @@ export default function UsersAdmin() {
   const [error, setError] = useState("");
   const [showPwd, setShowPwd] = useState(false);
 
+  // 🟢 ref para scroll al formulario
+  const formRef = useRef(null);
+
   const load = async () => {
     setLoading(true);
     setError("");
@@ -65,10 +68,17 @@ export default function UsersAdmin() {
     );
   }, [list, q]);
 
+  const scrollToForm = () => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   const startCreate = () => {
     setEditingId(null);
     setForm(emptyForm);
     setShowPwd(false);
+    scrollToForm(); // 🟢 scroll al formulario al crear
   };
 
   const startEdit = async (id) => {
@@ -89,6 +99,7 @@ export default function UsersAdmin() {
         Estado: u.Estado ?? true,
       });
       setShowPwd(false);
+      scrollToForm(); // 🟢 scroll al formulario al editar
     } catch (e) {
       alert(e.message || "No se pudo cargar el usuario");
     } finally {
@@ -228,7 +239,8 @@ export default function UsersAdmin() {
           )}
         </div>
 
-        <div className="ua-form">
+        {/* 🟢 agregamos ref al contenedor del formulario */}
+        <div className="ua-form" ref={formRef}>
           <h2>{editingId ? "Editar usuario" : "Nuevo usuario"}</h2>
           <form onSubmit={onSubmit} className="ua-form-grid">
             <label>
@@ -285,7 +297,7 @@ export default function UsersAdmin() {
             </label>
 
             <label className="ua-col-2">
-              Contraseña {editingId && <span className="ua-muted">(opcional)</span>}
+              Contraseña {editingId && <span className="ua-muted"></span>}
               <div style={{ display: "flex", gap: 8 }}>
                 <input
                   type={showPwd ? "text" : "password"}

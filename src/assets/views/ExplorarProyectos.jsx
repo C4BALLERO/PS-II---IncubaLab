@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../styles/Explorar.css";
+import { Link } from "react-router-dom";
 
 function ExplorarProyectos() {
   const [proyectos, setProyectos] = useState([]);
@@ -146,9 +147,9 @@ function ExplorarProyectos() {
                         Seguir
                       </button>
                     )}
-                    <a className="btn-azul" href={`/proyecto/${p.IdProyecto}`}>
+                    <Link className="btn-azul" to={`/proyecto/${p.IdProyecto}`}>
                       Ver campaña
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

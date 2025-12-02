@@ -243,35 +243,35 @@ VALUES
  'Soluciones verdes innovadoras.', 
  '/uploads/proyecto1.png', 
  'https://www.youtube.com/watch?v=t9paRh-fb8Q', 
- NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), 100, 'Activo', TRUE, 'Activo', 1, 1, 'Juan Pérez', '77000001'),
+ CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 100, 'Activo', TRUE, 'Activo', 2, 1, 'Juan Pérez', '77000001'),
 
 ('Aprendizaje Inteligente', 
  'Plataforma educativa basada en inteligencia artificial que adapta el contenido, ritmo y metodología según el perfil de cada estudiante. Permite evaluar el progreso en tiempo real, ofrecer recomendaciones personalizadas y fomentar la motivación a través de recompensas y gamificación. Además, integra herramientas de análisis de datos para que los docentes optimicen la enseñanza y mejoren los resultados académicos.', 
  'Educación adaptativa con IA.', 
  '/uploads/proyecto2.png', 
  'https://www.youtube.com/watch?v=YZzB1Uca7n0', 
- NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), 80, 'Activo', TRUE, 'Activo', 2, 3, 'María Rodríguez', '77000002'),
+ CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 80, 'Activo', TRUE, 'Activo', 3, 3, 'María Rodríguez', '77000002'),
 
 ('BioSalud Avanzada', 
  'Proyecto enfocado en innovación biotecnológica aplicada a la salud, mediante el desarrollo de diagnósticos rápidos, tratamientos personalizados y monitoreo de pacientes en tiempo real. Incluye investigación de vanguardia en genética y microbiología, con el objetivo de mejorar la calidad de vida y prevenir enfermedades a nivel comunitario. Se busca colaborar con instituciones de salud para implementar soluciones efectivas y sostenibles.', 
  'Biotecnología aplicada a la salud.', 
  '/uploads/proyecto3.png', 
  'https://www.youtube.com/watch?v=qjh-plnlB40', 
- NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), 120, 'Activo', TRUE, 'Activo', 3, 6, 'Carlos García', '77000003'),
+ CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 120, 'Activo', TRUE, 'Activo', 4, 6, 'Carlos García', '77000003'),
 
 ('Arte y Tecnología', 
  'Proyecto que combina arte y tecnología para generar experiencias culturales interactivas e inmersivas. Incluye desarrollo de instalaciones digitales, realidad aumentada y contenidos multimedia que promueven la creatividad y el aprendizaje cultural. Se busca acercar el arte a nuevas audiencias, fomentar la participación ciudadana y ofrecer herramientas innovadoras para artistas, educadores y gestores culturales.', 
  'Cultura digital interactiva.', 
  '/uploads/proyecto4.png', 
  'https://www.youtube.com/watch?v=AB9VToh2y-s', 
- NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), 60, 'Activo', TRUE, 'Activo', 4, 8, 'Ana Fernández', '77000004'),
+ CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 60, 'Activo', TRUE, 'Activo', 5, 8, 'Ana Fernández', '77000004'),
 
 ('Robótica Educativa', 
  'Proyecto orientado a la enseñanza de robótica en escuelas, fomentando la educación STEM desde edades tempranas. Incluye desarrollo de kits de robótica, talleres prácticos y competencias entre estudiantes. Se busca estimular el pensamiento lógico, la creatividad y la colaboración, preparando a los niños para los desafíos del siglo XXI y promoviendo habilidades tecnológicas esenciales.', 
  'Robots educativos para niños.', 
  '/uploads/proyecto5.png', 
  'https://www.youtube.com/watch?v=Ffz4VGqRww4', 
- NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), 90, 'Activo', TRUE, 'Activo', 5, 11, 'Luis Ramírez', '77000005');
+ CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 90, 'Activo', TRUE, 'Activo', 6, 11, 'Luis Ramírez', '77000005');
 
 -- ------------------------------------------------------
 -- Imágenes adicionales por proyecto

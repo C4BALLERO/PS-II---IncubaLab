@@ -187,22 +187,6 @@ const Register = () => {
                 />
               </div>
 
-              <div className="checkbox-group">
-                <input type="checkbox" id="newsletter" name="newsletter" />
-                <label htmlFor="newsletter">
-                  Envíeme proyectos y noticias ocasionales
-                </label>
-              </div>
-
-              <div className="checkbox-group">
-                <input type="checkbox" id="terms" name="terms" required />
-                <label htmlFor="terms">
-                  Acepto la <a href="#">Política de privacidad</a>,{" "}
-                  <a href="#">política de cookies</a> y los{" "}
-                  <a href="#">términos de uso</a>.
-                </label>
-              </div>
-
               <button type="submit" className="register-btn" disabled={loading}>
                 {loading ? "Registrando..." : "Crear cuenta"}
               </button>

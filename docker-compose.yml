@@ -19,16 +19,15 @@ services:
       - app_network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uuser", "-pincuvalab"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
       context: ./server
-      dockerfile: Dockerfile
-    container_name: express_api_Incuvalab
+      dockerfile: Dockerfile 
+    container_name: express_api
     restart: always
     ports:
       - "4000:4000"
@@ -40,27 +39,20 @@ services:
     networks:
       - app_network
     volumes:
-      - ./server/src:/server/src
       - ./server/uploads:/server/uploads
-      - /server/node_modules
-    command: nodemon --legacy-watch --watch src src/index.js
-
-
+      
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: . 
+      dockerfile: Dockerfile 
     container_name: react_frontend
     restart: always
     ports:
-      - "5173:5173"
+      - "8080:80"
     depends_on:
       - backend
     networks:
       - app_network
-    volumes:
-      - ./:/app
-      - /app/node_modules
 
 networks:
   app_network:

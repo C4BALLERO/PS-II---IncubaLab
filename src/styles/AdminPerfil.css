@@ -164,9 +164,22 @@
   color: #66b5cb;
 }
 
-/* ==============================
-   MEDIA QUERIES
-   ============================== */
+.logout-btn-perfil {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: white;
+  background-color: #880430;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.logout-btn-perfil:hover {
+  background-color: #a10b4f; 
+}
 
 /* Móvil: perfil debajo del panel izquierdo */
 @media (max-width: 768px) {
@@ -177,11 +190,6 @@
 
   .perfil-left {
     padding-top: 2rem;
-  }
-
-  .perfil-right {
-    padding: 1rem;
-    margin-top: 1rem;
   }
 }
 
@@ -197,13 +205,5 @@
 
   .dashboard-icon {
     font-size: 40px;
-  }
-
-  .perfil-left {
-    padding: 1.5rem 1rem;
-  }
-
-  .perfil-right {
-    padding: 1rem;
   }
 }

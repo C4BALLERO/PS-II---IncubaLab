@@ -1,18 +1,16 @@
-# Backend: Node + Nodemon para hot reload
-FROM node:20
+FROM node:20-alpine
 
 WORKDIR /server
 
-# Copiar package.json e instalar dependencias
+# Copiar package.json e instalar solo dependencias de producción
 COPY package*.json ./
-RUN npm install
-RUN npm install -g nodemon
+RUN npm install --production
 
-# Copiar el resto del código
+# Copiar el código
 COPY . .
 
-# Exponer puerto
+# Exponer puerto del API
 EXPOSE 4000
 
-# Comando para desarrollo
-CMD ["nodemon", "src/index.js"]
+# Ejecutar la app con Node
+CMD ["node", "src/index.js"]

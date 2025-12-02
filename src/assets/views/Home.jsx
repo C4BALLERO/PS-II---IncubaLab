@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { HeroSection } from '../components/HomeComponents';
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -86,7 +87,6 @@ const Home = () => {
                 alt={p.Nombre}
                 style={{
                   width: '100%',
-                  height: '180px',
                   objectFit: 'cover',
                   borderRadius: '12px',
                   border: '1px solid #ccc'
@@ -131,8 +131,8 @@ const Home = () => {
 
               <p style={{ marginTop: "8px", color: "#555" }}>Seguidores: {p.MeGustas}</p>
 
-              <a
-                href={`/proyecto/${p.IdProyecto}`}
+              <Link
+                to={`/proyecto/${p.IdProyecto}`}
                 style={{
                   marginTop: 'auto',
                   alignSelf: 'center',
@@ -148,7 +148,7 @@ const Home = () => {
                 }}
               >
                 Ver campaña
-              </a>
+              </Link>
             </div>
           </div>
         ))}
